@@ -1,4 +1,4 @@
-import React, { Fragment} from 'react'
+import React, {Fragment, useEffect} from 'react'
 import { createTheme, styled, useTheme } from '@mui/material/styles';
 import AppBarCC from './AppBarCC'
 
@@ -20,6 +20,9 @@ import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import { ThemeProvider } from '@emotion/react';
+import Tooltip from '@mui/material/Tooltip';
+
+import { useMediaQuery } from '@mui/material';
 
 const drawerWidth = 245;
 
@@ -73,6 +76,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function SideMenu() {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
+	const [cannotOpen, setCannotOpen] = React.useState(false);
 
 	const themeSideMenu = createTheme({
 		typography: {
@@ -81,6 +85,10 @@ export default function SideMenu() {
 			].join(','),
 		}
 	})
+
+	const handleCannotOpen = (val) => {
+		setCannotOpen(val);
+	};
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -97,14 +105,25 @@ export default function SideMenu() {
 		<MilitaryTechOutlinedIcon/>,
 	];
 
+	const isXs = useMediaQuery('(max-width:600px)'); // Adjust the width to match your "xs" breakpoint
+
+	// Call your function when the screen size matches "xs"
+	useEffect(() => {
+		if (isXs) {
+			handleCannotOpen(true);
+		} else {
+			handleCannotOpen(false);
+		}
+	}, [isXs]);
+
 	return (
 		<Box sx={{ display: 'flex' }}>
 		<CssBaseline />
 
-		<AppBarCC position={'relative'} openVar={open} handleDrawerOpen={handleDrawerOpen} sx={{ml: 1}}/>
-		<Drawer variant="permanent" open={open} PaperProps={{style: {border: 'none'}}}>
+		<AppBarCC position={'relative'} openVar={open} cannotOpen={cannotOpen} handleDrawerOpen={handleDrawerOpen} sx={{ml: 1}}/>
+		<Drawer variant="permanent" open={open && !cannotOpen} PaperProps={{style: {border: 'none'}}} sx={{ display: { xs: {handleDrawerClose}}}}>
 			<DrawerHeader>
-				{!open && <IconButton 
+				{!open && !cannotOpen && <IconButton 
 					color="inherit"
 					aria-label="open drawer"
 					onClick={handleDrawerOpen}
@@ -120,7 +139,7 @@ export default function SideMenu() {
 				</IconButton>}
 
 				{open && <Fragment>
-				<Typography sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize:25 }}>
+				<Typography sx={{ mr: 1, fontSize:25 }}>
 					😜
 				</Typography>
 				<Typography
@@ -149,6 +168,7 @@ export default function SideMenu() {
 			<ThemeProvider theme={themeSideMenu}>
 			<List sx={{ flexGrow: 1 }}>
 				{['Inicio', 'Conversaciones', 'Perfil', 'Rangos'].map((text, index) => (
+					<Tooltip title={text} placement="right">
 					<ListItem key={text} disablePadding sx={{ display: 'block' }}>
 					<ListItemButton
 						sx={{
@@ -169,6 +189,7 @@ export default function SideMenu() {
 						<ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
 					</ListItemButton>
 					</ListItem>
+					</Tooltip>
 				))}
 
 				<ListItem disablePadding

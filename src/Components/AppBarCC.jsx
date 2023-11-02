@@ -10,7 +10,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import MuiAppBar from '@mui/material/AppBar';
@@ -86,7 +85,7 @@ const AppBar = styled(MuiAppBar, {
 	}),
 }));
 
-export default function PrimarySearchAppBar( {openVar, handleDrawerOpen} ) {
+export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -151,13 +150,15 @@ export default function PrimarySearchAppBar( {openVar, handleDrawerOpen} ) {
         onClose={handleMobileMenuClose}
         >
         <MenuItem>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-            <Badge badgeContent={4} color="error">
-                <MailIcon />
-            </Badge>
-            </IconButton>
-            <p>Messages</p>
+            <Button variant="contained" color="error" disableElevation >Post</Button>
         </MenuItem>
+        <MenuItem>
+            <Button variant="outlined" color="error" disableElevation >Retos</Button>
+        </MenuItem>
+        <MenuItem>
+            <Button variant="contained" color="secondary" disableElevation >Participaciones</Button>
+        </MenuItem>
+                 
         <MenuItem>
             <IconButton
             size="large"
@@ -216,12 +217,12 @@ export default function PrimarySearchAppBar( {openVar, handleDrawerOpen} ) {
 
     return (
         <Fragment>
-        <AppBar  elevation={0} position="fixed" open={openVar} sx={{borderRadius:'12px'}}>
+        <AppBar  elevation={0} position="fixed" open={openVar && !cannotOpen} sx={{borderRadius:'12px'}}>
             <Toolbar>
             {!openVar && <Box 
                 sx={{display: 'flex',
                 mr: 4}}>
-            <Typography sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize:25 }}>
+            <Typography sx={{ display: { xs: 'flex', md: 'flex' }, mr: 1, fontSize:25 }}>
                 😜
             </Typography>
             <Typography
