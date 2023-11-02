@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import React, { Fragment} from 'react'
+import { createTheme, styled, useTheme } from '@mui/material/styles';
 import AppBarCC from './AppBarCC'
 
 import Box from '@mui/material/Box';
@@ -7,9 +7,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
@@ -20,10 +18,10 @@ import HomeOutlined from '@mui/icons-material/HomeOutlined';
 import ChatOutlined from '@mui/icons-material/ChatOutlined';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-import AdbIcon from '@mui/icons-material/Adb';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
+import { ThemeProvider } from '@emotion/react';
 
-const drawerWidth = 240;
+const drawerWidth = 245;
 
 const openedMixin = (theme) => ({
 	width: drawerWidth,
@@ -76,6 +74,14 @@ export default function SideMenu() {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
 
+	const themeSideMenu = createTheme({
+		typography: {
+			fontFamily: [
+			  'Average Sans',
+			].join(','),
+		}
+	})
+
 	const handleDrawerOpen = () => {
 		setOpen(true);
 	};
@@ -94,10 +100,29 @@ export default function SideMenu() {
 	return (
 		<Box sx={{ display: 'flex' }}>
 		<CssBaseline />
-		<AppBarCC openVar={open} handleDrawerOpen={handleDrawerOpen}/>
-		<Drawer variant="permanent" open={open}>
+
+		<AppBarCC position={'relative'} openVar={open} handleDrawerOpen={handleDrawerOpen} sx={{ml: 1}}/>
+		<Drawer variant="permanent" open={open} PaperProps={{style: {border: 'none'}}}>
 			<DrawerHeader>
-				<AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+				{!open && <IconButton 
+					color="inherit"
+					aria-label="open drawer"
+					onClick={handleDrawerOpen}
+					sx={{
+						flexGrow: 1,
+						minWidth: 0,
+						mr: 'auto',
+						justifyContent: 'center',
+						...(open && { display: 'none' }),
+						}}
+				>
+					<ChevronRightIcon />
+				</IconButton>}
+
+				{open && <Fragment>
+				<Typography sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize:25 }}>
+					😜
+				</Typography>
 				<Typography
 					variant="h6"
 					noWrap
@@ -106,9 +131,8 @@ export default function SideMenu() {
 					sx={{
 					mr: 2,
 					display: { xs: 'none', md: 'flex' },
-					fontFamily: 'monospace',
-					fontWeight: 700,
-					letterSpacing: '.3rem',
+					fontFamily: 'Average Sans',
+					fontWeight: 400,
 					color: 'inherit',
 					textDecoration: 'none',
 					}}
@@ -118,8 +142,11 @@ export default function SideMenu() {
 				<IconButton onClick={handleDrawerClose}>
 					{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
 				</IconButton>
+				</Fragment>}
 			</DrawerHeader>
 	
+
+			<ThemeProvider theme={themeSideMenu}>
 			<List sx={{ flexGrow: 1 }}>
 				{['Inicio', 'Conversaciones', 'Perfil', 'Rangos'].map((text, index) => (
 					<ListItem key={text} disablePadding sx={{ display: 'block' }}>
@@ -146,8 +173,9 @@ export default function SideMenu() {
 
 				<ListItem disablePadding
 					sx={{
-						position: 'fixed',
+						position: 'absolute',
 						bottom: 0,
+						display: 'block'
 					}}
 					>
 					<ListItemButton sx={{
@@ -162,7 +190,7 @@ export default function SideMenu() {
 							justifyContent: 'center',
 						}}
 						>
-						<DarkModeOutlinedIcon />
+							<NightsStayIcon />
 						</ListItemIcon>
 						<ListItemText primary="Modo Oscuro" sx={{ opacity: open ? 1 : 0 }} />
 					</ListItemButton>
@@ -170,38 +198,15 @@ export default function SideMenu() {
 				</ListItem>
 
 			</List>
-			
+			</ThemeProvider>
 		</Drawer>
-		<Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-			<DrawerHeader />
-			<Typography paragraph>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-			tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-			enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-			imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-			Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-			Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-			adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-			nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-			leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-			feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-			consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-			sapien faucibus et molestie ac.
-			</Typography>
-			<Typography paragraph>
-			Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-			eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-			neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-			tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-			sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-			tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-			gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-			et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-			tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-			eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-			posuere sollicitudin aliquam ultrices sagittis orci a.
-			</Typography>
-		</Box>
+
+			<Box component="main" sx={{ flexGrow: 1, p: 3, ml:4, mt:14, mr:4, border: 1}}>
+				<DrawerHeader/>
+				<Typography paragraph>
+				Here I'll put more components
+				</Typography>
+			</Box>
 		</Box>
 	);
 }

@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef, useEffect} from 'react'
+import React, { Fragment} from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,40 +8,40 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import MuiAppBar from '@mui/material/AppBar';
-import AdbIcon from '@mui/icons-material/Adb';
-
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(3),
+        width: 'auto',
+    },
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -57,19 +57,28 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-const drawerWidth = 240;
+const drawerWidth = 245;
+const drawerWidthClosed = 125;
+const drawerWidthOpenGap = 60;
+const drawerWidthOpenGapRight = 30;
+const drawerMarginTop = 20;
 
 const AppBar = styled(MuiAppBar, {
 	shouldForwardProp: (prop) => prop !== 'open',
 	})(({ theme, open }) => ({
+        marginTop: drawerMarginTop,
+        marginRight: drawerWidthOpenGapRight,
+        width: `calc(100% - ${drawerWidthClosed}px)`,
 		zIndex: theme.zIndex.drawer + 1,
 		transition: theme.transitions.create(['width', 'margin'], {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
 		}),
 		...(open && {
+            marginTop: drawerMarginTop,
 			marginLeft: drawerWidth,
-			width: `calc(100% - ${drawerWidth}px)`,
+            marginRight: drawerWidthOpenGapRight,
+			width: `calc(100% - ${drawerWidth}px - ${drawerWidthOpenGap}px)`,
 			transition: theme.transitions.create(['width', 'margin'], {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.enteringScreen,
@@ -78,6 +87,7 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export default function PrimarySearchAppBar( {openVar, handleDrawerOpen} ) {
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -175,23 +185,45 @@ export default function PrimarySearchAppBar( {openVar, handleDrawerOpen} ) {
         </Menu>
     );
 
+    function stringToColor(string) {
+        let hash = 0;
+        let i;
+    
+        /* eslint-disable no-bitwise */
+        for (i = 0; i < string.length; i += 1) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash);
+        }
+    
+        let color = '#';
+    
+        for (i = 0; i < 3; i += 1) {
+        const value = (hash >> (i * 8)) & 0xff;
+        color += `00${value.toString(16)}`.slice(-2);
+        }
+        /* eslint-enable no-bitwise */
+    
+        return color;
+    }
+        
+    function stringAvatar(name) {
+        return {
+        sx: {
+            bgcolor: stringToColor(name),
+        },
+        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        };
+    }
+
     return (
         <Fragment>
-        <AppBar position="fixed" open={openVar}>
+        <AppBar  elevation={0} position="fixed" open={openVar} sx={{borderRadius:'12px'}}>
             <Toolbar>
-            <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{
-                marginRight: 5,
-                ...(openVar && { display: 'none' }),
-                }}
-            >
-                <MenuIcon />
-            </IconButton>
-            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+            {!openVar && <Box 
+                sx={{display: 'flex',
+                mr: 4}}>
+            <Typography sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize:25 }}>
+                😜
+            </Typography>
             <Typography
                 variant="h6"
                 noWrap
@@ -200,52 +232,46 @@ export default function PrimarySearchAppBar( {openVar, handleDrawerOpen} ) {
                 sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
+                fontFamily: 'Average Sans',
+                fontWeight: 400,
                 color: 'inherit',
                 textDecoration: 'none',
                 }}
             >
                 Crazy Challenge
-            </Typography>
-            <Search>
+            </Typography> </Box>}
+
+            <Stack direction="row" spacing={2} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'} }}>
+                <Button variant="contained" color="error" disableElevation >Post</Button>
+                <Button variant="outlined" color="error" disableElevation >Retos</Button>
+                <Button variant="contained" color="secondary" disableElevation >Participaciones</Button>
+            </Stack>
+            
+
+            <Box sx={{ flexGrow: 1 }} />
+            <Search sx={{border: 1, borderColor: '#E7E8EF'}}>
                 <SearchIconWrapper>
                 <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                placeholder="Search…"
+                placeholder="Buscar..."
                 inputProps={{ 'aria-label': 'search' }}
                 />
             </Search>
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="error">
-                    <MailIcon />
-                </Badge>
-                </IconButton>
+            <Stack direction="row" spacing={2} sx={{ display: { xs: 'none', md: 'flex' } }}>
+   
                 <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
-                >
-                <Badge badgeContent={17} color="error">
-                    <NotificationsIcon />
-                </Badge>
+                    size="large"
+                    aria-label="show 17 new notifications"
+                    color="inherit"
+                    >
+                    <Badge badgeContent={17} color="error">
+                        <NotificationsIcon />
+                    </Badge>
                 </IconButton>
-                <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-                >
-                <AccountCircle />
-                </IconButton>
-            </Box>
+  
+                <Avatar sx={{ width: 10, height: 10 }} {...stringAvatar('Kent Dodds')} />
+            </Stack>
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                 <IconButton
                 size="large"
