@@ -21,6 +21,8 @@ import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import { ThemeProvider } from '@emotion/react';
 import Tooltip from '@mui/material/Tooltip';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 import { useMediaQuery } from '@mui/material';
 
@@ -73,6 +75,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 	}),
 );
 
+const Item = styled(Paper)(({ theme }) => ({
+	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+	...theme.typography.body2,
+	padding: theme.spacing(1),
+	textAlign: 'center',
+	color: theme.palette.text.secondary,
+}));
+
 export default function SideMenu() {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
@@ -100,7 +110,6 @@ export default function SideMenu() {
 
 	const icons = [
 		<HomeOutlined/>,
-		<ChatOutlined/>,
 		<AccountBoxOutlinedIcon/>,
 		<MilitaryTechOutlinedIcon/>,
 	];
@@ -167,7 +176,7 @@ export default function SideMenu() {
 
 			<ThemeProvider theme={themeSideMenu}>
 			<List sx={{ flexGrow: 1 }}>
-				{['Inicio', 'Conversaciones', 'Perfil', 'Rangos'].map((text, index) => (
+				{['Inicio', 'Perfil', 'Rangos'].map((text, index) => (
 					<Tooltip title={text} placement="right">
 					<ListItem key={text} disablePadding sx={{ display: 'block' }}>
 					<ListItemButton
@@ -222,12 +231,20 @@ export default function SideMenu() {
 			</ThemeProvider>
 		</Drawer>
 
-			<Box component="main" sx={{ flexGrow: 1, p: 3, ml:4, mt:14, mr:4, border: 1}}>
-				<DrawerHeader/>
-				<Typography paragraph>
-				Here I'll put more components
-				</Typography>
-			</Box>
+			<Grid container component="main" spacing={2} sx={{border: 1, mt:14, ml:4, mr:4}}>
+				<Grid item xs={8}>
+					<Item>xs=8</Item>
+				</Grid>
+				<Grid item xs={4}>
+					<Item>xs=4</Item>
+				</Grid>
+				<Grid item xs={4}>
+					<Item>xs=4</Item>
+				</Grid>
+				<Grid item xs={8}>
+					<Item>xs=8</Item>
+				</Grid>
+			</Grid>
 		</Box>
 	);
 }
