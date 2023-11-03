@@ -149,9 +149,7 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
         open={isMobileMenuOpen}
         onClose={handleMobileMenuClose}
         >
-        <MenuItem>
-            <Button variant="contained" color="error" disableElevation >Post</Button>
-        </MenuItem>
+
         <MenuItem>
             <Button variant="outlined" color="error" disableElevation >Retos</Button>
         </MenuItem>
@@ -171,7 +169,7 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
             </IconButton>
             <p>Notifications</p>
         </MenuItem>
-        <MenuItem onClick={handleProfileMenuOpen}>
+        <MenuItem>
             <IconButton
             size="large"
             aria-label="account of current user"
@@ -232,7 +230,7 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
                 href="#app-bar-with-responsive-menu"
                 sx={{
                 mr: 2,
-                display: { xs: 'none', md: 'flex' },
+                display: { xs: 'none', md: 'none', lg:'flex' },
                 fontFamily: 'Average Sans',
                 fontWeight: 400,
                 color: 'inherit',
@@ -240,10 +238,26 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
                 }}
             >
                 Crazy Challenge
-            </Typography> </Box>}
+            </Typography>
+            <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                href="#app-bar-with-responsive-menu"
+                sx={{
+                display: { xs: 'flex', md: 'flex', lg:'none' },
+                fontFamily: 'Average Sans',
+                fontWeight: 400,
+                color: 'inherit',
+                textDecoration: 'none',
+                }}
+            >
+                CC
+            </Typography>
+            
+             </Box>}
 
             <Stack direction="row" spacing={2} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'} }}>
-                <Button variant="contained" color="error" disableElevation >Post</Button>
                 <Button variant="outlined" color="error" disableElevation >Retos</Button>
                 <Button variant="contained" color="secondary" disableElevation >Participaciones</Button>
             </Stack>
@@ -259,7 +273,7 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
                 inputProps={{ 'aria-label': 'search' }}
                 />
             </Search>
-            <Stack direction="row" spacing={2} sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <Stack direction="row" spacing={2} sx={{ display: { xs: 'none', md: 'flex' }, mr:4 }}>
    
                 <IconButton
                     size="large"

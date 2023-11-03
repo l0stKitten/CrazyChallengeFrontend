@@ -15,7 +15,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import HomeOutlined from '@mui/icons-material/HomeOutlined';
-import ChatOutlined from '@mui/icons-material/ChatOutlined';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
@@ -23,6 +22,8 @@ import { ThemeProvider } from '@emotion/react';
 import Tooltip from '@mui/material/Tooltip';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import SlideshowOutlinedIcon from '@mui/icons-material/SlideshowOutlined';
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 
 import { useMediaQuery } from '@mui/material';
 
@@ -114,11 +115,17 @@ export default function SideMenu() {
 		<MilitaryTechOutlinedIcon/>,
 	];
 
-	const isXs = useMediaQuery('(max-width:600px)'); // Adjust the width to match your "xs" breakpoint
+	const iconsRetos = [
+		<SlideshowOutlinedIcon/>,
+		<EmojiPeopleIcon/>,
+	];
+
+	const isXs = useMediaQuery('(max-width:996px)'); // Adjust the width to match your "xs" breakpoint
 
 	// Call your function when the screen size matches "xs"
 	useEffect(() => {
 		if (isXs) {
+			handleDrawerClose();
 			handleCannotOpen(true);
 		} else {
 			handleCannotOpen(false);
@@ -177,8 +184,8 @@ export default function SideMenu() {
 			<ThemeProvider theme={themeSideMenu}>
 			<List sx={{ flexGrow: 1 }}>
 				{['Inicio', 'Perfil', 'Rangos'].map((text, index) => (
-					<Tooltip title={text} placement="right">
-					<ListItem key={text} disablePadding sx={{ display: 'block' }}>
+					<Tooltip key={text} title={text} placement="right">
+					<ListItem  disablePadding sx={{ display: 'block' }}>
 					<ListItemButton
 						sx={{
 						minHeight: 48,
@@ -201,6 +208,31 @@ export default function SideMenu() {
 					</Tooltip>
 				))}
 
+				{['Retos', 'Participaciones'].map((text, index) => (
+					<Tooltip key={text} title={text} placement="right" >
+					<ListItem  disablePadding sx={{ display:  { xs: 'flex', md: 'none' }, }}>
+					<ListItemButton
+						sx={{
+						minHeight: 48,
+						justifyContent: open ? 'initial' : 'center',
+						px: 2.5,
+						}}
+					>
+						<ListItemIcon
+						sx={{
+							minWidth: 0,
+							mr: open ? 3 : 'auto',
+							justifyContent: 'center',
+						}}
+						>
+						{iconsRetos[index]}
+						</ListItemIcon>
+						<ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+					</ListItemButton>
+					</ListItem>
+					</Tooltip>
+				))}
+
 				<ListItem disablePadding
 					sx={{
 						position: 'absolute',
@@ -210,7 +242,7 @@ export default function SideMenu() {
 					>
 					<ListItemButton sx={{
 						minHeight: 48,
-						justifyContent: open ? 'center' : 'center',
+						justifyContent: open ? 'initial' : 'center',
 						px: 2.5,
 						}}
 					>
@@ -231,20 +263,115 @@ export default function SideMenu() {
 			</ThemeProvider>
 		</Drawer>
 
-			<Grid container component="main" spacing={2} sx={{border: 1, mt:14, ml:4, mr:4}}>
-				<Grid item xs={8}>
-					<Item>xs=8</Item>
+		<div style={{ width: '100%' }}>
+		<Box sx={{ display:'flex', border: 1, mt:14, ml:4, mr:4, borderColor:"red", gap: 2}}>
+			<Grid
+				container
+				rowSpacing={3}
+				direction="column"
+				justifyContent="center"
+				alignItems="center"
+				sx={{border:1, borderColor:"blue"}}
+			>
+				<Grid item xl="auto" sx={{border: 1, borderColor:"purple"}}>
+				<Paper 
+				sx={{
+					minWidth: 336,
+					width: 680,
+					border:1,
+					borderColor:"yellow"
+				}}>
+					asdasd
+				</Paper>
 				</Grid>
-				<Grid item xs={4}>
-					<Item>xs=4</Item>
+				<Grid item xs={6} xl="auto">
+				<Paper 
+				sx={{
+					minWidth: 336,
+					width: 680,
+					border:1,
+					borderColor:"yellow"
+				}}>
+					asdasd
+				</Paper>
 				</Grid>
-				<Grid item xs={4}>
-					<Item>xs=4</Item>
+				<Grid item xs={6} xl="auto">
+				<Paper 
+				sx={{
+					minWidth: 336,
+					width: 680,
+					border:1,
+					borderColor:"yellow"
+				}}>
+					asdasd
+				</Paper>
 				</Grid>
-				<Grid item xs={8}>
-					<Item>xs=8</Item>
+				<Grid item xs={6} xl="auto">
+				<Paper 
+				sx={{
+					minWidth: 336,
+					width: 680,
+					border:1,
+					borderColor:"yellow"
+				}}>
+					asdasd
+				</Paper>
+				</Grid>
+				<Grid item xs={6} xl="auto">
+				<Paper 
+				sx={{
+					minWidth: 336,
+					width: 680,
+					border:1,
+					borderColor:"yellow"
+				}}>
+					asdasd
+				</Paper>
 				</Grid>
 			</Grid>
+			<Grid
+				container
+				rowSpacing={3}
+				direction="column"
+				justifyContent="center"
+				alignItems="flex-end"
+				sx={{border:1, borderColor:"blue"}}
+				xl
+			>
+				<Grid item xs={6} xl="auto">
+				<Paper 
+				sx={{
+					width: 360,
+					border:1,
+					borderColor:"yellow"
+				}}>
+					xxxxxx
+				</Paper>
+				</Grid>
+				
+				<Grid item xs={6} xl="auto">
+				<Paper 
+				sx={{
+					width: 360,
+					border:1,
+					borderColor:"yellow"
+				}}>
+					xxxxxx
+				</Paper>
+				</Grid>
+				<Grid item xs={6} xl="auto">
+				<Paper 
+				sx={{
+					width: 360,
+					border:1,
+					borderColor:"yellow"
+				}}>
+					xxxxxx
+				</Paper>
+				</Grid>
+			</Grid>
+		</Box>
+		</div>
 		</Box>
 	);
 }
