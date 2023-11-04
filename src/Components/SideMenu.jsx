@@ -86,6 +86,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function SideMenu() {
 	const theme = useTheme();
+
 	const [open, setOpen] = React.useState(false);
 	const [cannotOpen, setCannotOpen] = React.useState(false);
 
@@ -121,6 +122,7 @@ export default function SideMenu() {
 	];
 
 	const isXs = useMediaQuery('(max-width:996px)'); // Adjust the width to match your "xs" breakpoint
+	const isXsChangeBox = useMediaQuery('(max-width:900px)');
 
 	// Call your function when the screen size matches "xs"
 	useEffect(() => {
@@ -263,115 +265,35 @@ export default function SideMenu() {
 			</ThemeProvider>
 		</Drawer>
 
-		<div style={{ width: '100%' }}>
-		<Box sx={{ display:'flex', border: 1, mt:14, ml:4, mr:4, borderColor:"red", gap: 2}}>
-			<Grid
-				container
-				rowSpacing={3}
-				direction="column"
-				justifyContent="center"
-				alignItems="center"
-				sx={{border:1, borderColor:"blue"}}
-			>
-				<Grid item xl="auto" sx={{border: 1, borderColor:"purple"}}>
-				<Paper 
-				sx={{
-					minWidth: 336,
-					width: 680,
-					border:1,
-					borderColor:"yellow"
+
+		<Box component="main" sx={{ flexGrow: 1, p: 3, mt:2, border:1, borderColor:"red"}}>
+			<DrawerHeader />
+			<Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
+				<Box gridColumn="span 8" sx={{
+					display: "flex",
+					flexDirection: "column", 
+					justifyContent: "space-between",
+					gap: 3,
+					gridColumn: isXsChangeBox ? 'span 12' : 'span 8',
 				}}>
-					asdasd
-				</Paper>
-				</Grid>
-				<Grid item xs={6} xl="auto">
-				<Paper 
-				sx={{
-					minWidth: 336,
-					width: 680,
-					border:1,
-					borderColor:"yellow"
+					{Array.from(Array(6)).map((_, index) => (
+						<Item key={index}>xs=8</Item>
+					))}
+					
+				</Box>
+				<Box gridColumn="span 4" sx={{
+					display: {xs: 'none', md: 'flex'},
+					flexDirection: "column", 
+					justifyContent: "space-between",
+					gap: 3,
 				}}>
-					asdasd
-				</Paper>
-				</Grid>
-				<Grid item xs={6} xl="auto">
-				<Paper 
-				sx={{
-					minWidth: 336,
-					width: 680,
-					border:1,
-					borderColor:"yellow"
-				}}>
-					asdasd
-				</Paper>
-				</Grid>
-				<Grid item xs={6} xl="auto">
-				<Paper 
-				sx={{
-					minWidth: 336,
-					width: 680,
-					border:1,
-					borderColor:"yellow"
-				}}>
-					asdasd
-				</Paper>
-				</Grid>
-				<Grid item xs={6} xl="auto">
-				<Paper 
-				sx={{
-					minWidth: 336,
-					width: 680,
-					border:1,
-					borderColor:"yellow"
-				}}>
-					asdasd
-				</Paper>
-				</Grid>
-			</Grid>
-			<Grid
-				container
-				rowSpacing={3}
-				direction="column"
-				justifyContent="center"
-				alignItems="flex-end"
-				sx={{border:1, borderColor:"blue"}}
-				xl
-			>
-				<Grid item xs={6} xl="auto">
-				<Paper 
-				sx={{
-					width: 360,
-					border:1,
-					borderColor:"yellow"
-				}}>
-					xxxxxx
-				</Paper>
-				</Grid>
-				
-				<Grid item xs={6} xl="auto">
-				<Paper 
-				sx={{
-					width: 360,
-					border:1,
-					borderColor:"yellow"
-				}}>
-					xxxxxx
-				</Paper>
-				</Grid>
-				<Grid item xs={6} xl="auto">
-				<Paper 
-				sx={{
-					width: 360,
-					border:1,
-					borderColor:"yellow"
-				}}>
-					xxxxxx
-				</Paper>
-				</Grid>
-			</Grid>
+					{Array.from(Array(6)).map((_, index) => (
+						<Item key={index}>xs=4</Item>
+					))}
+				</Box>
+			</Box>
 		</Box>
-		</div>
+
 		</Box>
 	);
 }
