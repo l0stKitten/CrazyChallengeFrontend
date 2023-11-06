@@ -266,7 +266,7 @@ export default function SideMenu() {
 		</Drawer>
 
 
-		<Box component="main" sx={{ flexGrow: 1, p: 3, mt:2, border:1, borderColor:"red"}}>
+		<Box component="main" sx={{ flexGrow: 1, p: 3, mt:2 }}>
 			<DrawerHeader />
 			<Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
 				<Box gridColumn="span 8" sx={{
