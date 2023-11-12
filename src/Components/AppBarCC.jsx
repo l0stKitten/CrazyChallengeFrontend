@@ -62,7 +62,10 @@ const drawerWidthOpenGap = 60;
 const drawerWidthOpenGapRight = 30;
 const drawerMarginTop = 20;
 
+
+
 const AppBar = styled(MuiAppBar, {
+    backgroundColor: 'background.paper',
 	shouldForwardProp: (prop) => prop !== 'open',
 	})(({ theme, open }) => ({
         marginTop: drawerMarginTop,
@@ -83,6 +86,16 @@ const AppBar = styled(MuiAppBar, {
 			duration: theme.transitions.duration.enteringScreen,
 			}),
 	}),
+}));
+
+const CustomAppBar = styled(AppBar, {
+    shouldForwardProp: (prop) => prop !== 'open',
+  })(({ theme, open }) => ({
+    // Your existing styles here
+  
+    // Add an inline style for the background color
+    backgroundColor: 'background', // Replace 'your-color-here' with your desired color
+    // ...
 }));
 
 export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
@@ -151,7 +164,7 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
         >
 
         <MenuItem>
-            <Button variant="outlined" color="error" disableElevation >Retos</Button>
+            <Button variant="outlined" color="primary" disableElevation >Retos</Button>
         </MenuItem>
         <MenuItem>
             <Button variant="contained" color="secondary" disableElevation >Participaciones</Button>
@@ -163,7 +176,7 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
             aria-label="show 17 new notifications"
             color="inherit"
             >
-            <Badge badgeContent={17} color="error">
+            <Badge badgeContent={17} color="primary">
                 <NotificationsIcon />
             </Badge>
             </IconButton>
@@ -215,7 +228,7 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
 
     return (
         <Fragment>
-        <AppBar  elevation={0} position="fixed" open={openVar && !cannotOpen} sx={{borderRadius:'12px'}}>
+        <CustomAppBar  elevation={0} position="fixed" open={openVar && !cannotOpen} sx={{borderRadius:'12px'}}>
             <Toolbar>
             {!openVar && <Box 
                 sx={{display: 'flex',
@@ -258,7 +271,7 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
              </Box>}
 
             <Stack direction="row" spacing={2} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'} }}>
-                <Button variant="outlined" color="error" disableElevation >Retos</Button>
+                <Button variant="outlined" color="primary" disableElevation >Retos</Button>
                 <Button variant="contained" color="secondary" disableElevation >Participaciones</Button>
             </Stack>
             
@@ -280,7 +293,7 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
                     aria-label="show 17 new notifications"
                     color="inherit"
                     >
-                    <Badge badgeContent={17} color="error">
+                    <Badge badgeContent={17} color="primary">
                         <NotificationsIcon />
                     </Badge>
                 </IconButton>
@@ -300,7 +313,7 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
                 </IconButton>
             </Box>
             </Toolbar>
-        </AppBar>
+        </CustomAppBar>
         {renderMobileMenu}
         {renderMenu}
         </Fragment>

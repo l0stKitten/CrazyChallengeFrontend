@@ -12,7 +12,7 @@ import completado from "../jsonlottie/completado.json";
 import nocompletado from "../jsonlottie/no cumplido.json";
 
 const style = {
-    height: 60,
+    height: 50,
 };
 
 export default function ReactionChallenge() {
@@ -23,7 +23,7 @@ export default function ReactionChallenge() {
                 flexDirection: "row",
                 boxShadow: 2,
                 borderRadius: 15,
-                width: 540,
+                width: 450,
             }}
         >
             <Player autoplay loop src={completado} style={style} />

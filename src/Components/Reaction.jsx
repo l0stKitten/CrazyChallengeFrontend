@@ -14,7 +14,7 @@ import memata from "../jsonlottie/me mata.json";
 export default function ReactionPost() {
 
     const style = {
-        height: 60,
+        height: 50,
     };
 
     return (
@@ -24,9 +24,8 @@ export default function ReactionPost() {
                 sx={{
                     display: "flex",
                     flexDirection: "row",
-                    boxShadow: 2,
-                    borderRadius: 15,
-                    width: 420,
+                    boxShadow: 3,
+                    width: 350,
                 }}
             >
 

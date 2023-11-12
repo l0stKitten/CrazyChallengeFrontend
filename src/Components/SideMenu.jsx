@@ -1,6 +1,7 @@
 import React, {Fragment, useEffect} from 'react'
 import { createTheme, styled, useTheme } from '@mui/material/styles';
 import AppBarCC from './AppBarCC'
+import Post from './Post'
 
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -75,6 +76,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 		}),
 	}),
 );
+
+/*const Post = styled(Paper)(({ theme }) => ({
+	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+	...theme.typography.body2,
+	padding: theme.spacing(1),
+	color: theme.palette.text.secondary,
+}));*/
 
 const Item = styled(Paper)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -268,30 +276,27 @@ export default function SideMenu() {
 
 		<Box component="main" sx={{ flexGrow: 1, p: 3, mt:2 }}>
 			<DrawerHeader />
-			<Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
-				<Box gridColumn="span 8" sx={{
-					display: "flex",
-					flexDirection: "column", 
-					justifyContent: "space-between",
-					gap: 3,
-					gridColumn: isXsChangeBox ? 'span 12' : 'span 8',
-				}}>
+
+			<Grid container spacing={2} sx={{mt: 2}}>
+				<Grid container xs={8} 
+					direction="column"
+					justifyContent="flex-start"
+					alignItems="center"
+					gap={4}
+				>
 					{Array.from(Array(6)).map((_, index) => (
-						<Item key={index}>xs=8</Item>
+						<Post key={index}>xs=8</Post>
 					))}
-					
-				</Box>
-				<Box gridColumn="span 4" sx={{
-					display: {xs: 'none', md: 'flex'},
-					flexDirection: "column", 
-					justifyContent: "space-between",
-					gap: 3,
-				}}>
+				</Grid>
+				{isXs ? null : <Grid item xs={4} container
+					direction="column"
+					justifyContent="flex-start"
+					alignItems="flex-end">
 					{Array.from(Array(6)).map((_, index) => (
 						<Item key={index}>xs=4</Item>
 					))}
-				</Box>
-			</Box>
+				</Grid>}
+			</Grid>
 		</Box>
 
 		</Box>
