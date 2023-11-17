@@ -1,8 +1,6 @@
 import React, {Fragment, useEffect} from 'react'
 import { createTheme, styled, useTheme } from '@mui/material/styles';
 import AppBarCC from './AppBarCC'
-import Post from './Post'
-import ContactList from './CardSM'
 
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -27,6 +25,8 @@ import SlideshowOutlinedIcon from '@mui/icons-material/SlideshowOutlined';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 
 import { useMediaQuery } from '@mui/material';
+import VideoCarousel from './VideoCarousel';
+import video from '../short/beeandpuppycat.mp4';
 
 const drawerWidth = 245;
 
@@ -84,29 +84,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 	color: theme.palette.text.secondary,
 }));*/
 
+const videoList = [
+	'https://www.youtube.com/shorts/yRZObA1G-hk',
+	'https://www.youtube.com/shorts/gsk-u8WI91c',
+	'https://www.youtube.com/shorts/fqw3Lq-a9D8',
+	
+]
 
-const contacts = [{"id":1,"name":"Grange Slight"},
-{"id":2,"name":"Cleveland Staniland"},
-{"id":3,"name":"Libbi Felderer"},
-{"id":4,"name":"Letizia Synke"},
-{"id":5,"name":"Rora Rickersey"},
-{"id":6,"name":"Anjela Giacomoni"},
-{"id":7,"name":"Jeramie De Cristofalo"},
-{"id":8,"name":"Charin Mugglestone"},
-{"id":9,"name":"Ludovico Howatt"},
-{"id":10,"name":"Dorie Mendez"},
-{"id":11,"name":"Erroll Youngs"},
-{"id":12,"name":"Virginie Melbourne"},
-{"id":13,"name":"Erin Whistlecraft"},
-{"id":14,"name":"Josey Brignall"},
-{"id":15,"name":"Carly Lago"},
-{"id":16,"name":"Aveline Chasemoore"},
-{"id":17,"name":"Clarita Banbrook"},
-{"id":18,"name":"Layton Twidle"},
-{"id":19,"name":"Mariana Salthouse"},
-{"id":20,"name":"Humphrey Zolini"}]
+const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
 
-export default function SideMenu() {
+
+export default function ChallengeShort() {
 	const theme = useTheme();
 
 	const [open, setOpen] = React.useState(false);
@@ -290,26 +278,7 @@ export default function SideMenu() {
 		<Box component="main" sx={{ flexGrow: 1, p: 3, mt:2, mr:1}}>
 			<DrawerHeader />
 
-			<Grid container spacing={2} marginRight={2}>
-				<Grid container item xs={isXs ? 12 : 10} 
-					direction="column"
-					justifyContent="flex-start"
-					alignItems="center"
-					gap={4}
-				>
-					{Array.from(Array(6)).map((_, index) => (
-						<Post key={index}>xs=8</Post>
-					))}
-				</Grid>
-				{isXs ? null : <Grid item xs={2} container
-					direction="column"
-					justifyContent="flex-start"
-					alignItems="flex-end">
-					
-					<ContactList title={"Chats"} contacts={contacts} mtbool={false}></ContactList>
-					<ContactList title={"Seguidores"} contacts={contacts} mtbool={true}></ContactList>
-				</Grid>}
-			</Grid>
+			<VideoCarousel videos={videoList}></VideoCarousel>
 		</Box>
 
 		</Box>

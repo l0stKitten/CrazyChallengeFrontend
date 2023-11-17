@@ -16,6 +16,7 @@ import MuiAppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -298,7 +299,16 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
                     </Badge>
                 </IconButton>
   
-                <Avatar sx={{ width: 10, height: 10 }} {...stringAvatar('Kent Dodds')} />
+                <Grid container wrap="nowrap" alignItems="center">
+                    <Grid item>
+                    <Avatar sx={{ width: 10, height: 10 }} {...stringAvatar('Tina Turner')} />
+                    </Grid>
+                    <Grid item sx={{ml:2}}>
+                    <Typography variant="body2">Tina Turner</Typography>
+                    <Typography variant="body2">Rango: Pro</Typography>
+                    </Grid>
+                </Grid>
+                
             </Stack>
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                 <IconButton
