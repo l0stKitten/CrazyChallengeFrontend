@@ -1,11 +1,9 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, { Fragment } from 'react'
 import { createTheme, styled, useTheme } from '@mui/material/styles';
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import { NavLink } from 'react-router-dom';
 
 import AppBarCC from './AppBarCC'
-import Post from './Post'
-import ContactList from './CardSM'
-import ChatPopup from './ChatPopup'
 
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -25,11 +23,9 @@ import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import { ThemeProvider } from '@emotion/react';
 import Tooltip from '@mui/material/Tooltip';
-import Grid from '@mui/material/Grid';
 import SlideshowOutlinedIcon from '@mui/icons-material/SlideshowOutlined';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
-
-import { useMediaQuery } from '@mui/material';
+import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 
 const drawerWidth = 245;
 
@@ -80,58 +76,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 	}),
 );
 
-/*const Post = styled(Paper)(({ theme }) => ({
-	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-	...theme.typography.body2,
-	padding: theme.spacing(1),
-	color: theme.palette.text.secondary,
-}));*/
 
-
-const contacts = [{"id":1,"name":"Grange Slight"},
-{"id":2,"name":"Cleveland Staniland"},
-{"id":3,"name":"Libbi Felderer"},
-{"id":4,"name":"Letizia Synke"},
-{"id":5,"name":"Rora Rickersey"},
-{"id":6,"name":"Anjela Giacomoni"},
-{"id":7,"name":"Jeramie De Cristofalo"},
-{"id":8,"name":"Charin Mugglestone"},
-{"id":9,"name":"Ludovico Howatt"},
-{"id":10,"name":"Dorie Mendez"},
-{"id":11,"name":"Erroll Youngs"},
-{"id":12,"name":"Virginie Melbourne"},
-{"id":13,"name":"Erin Whistlecraft"},
-{"id":14,"name":"Josey Brignall"},
-{"id":15,"name":"Carly Lago"},
-{"id":16,"name":"Aveline Chasemoore"},
-{"id":17,"name":"Clarita Banbrook"},
-{"id":18,"name":"Layton Twidle"},
-{"id":19,"name":"Mariana Salthouse"},
-{"id":20,"name":"Humphrey Zolini"}]
-
-export default function SideMenu() {
+export default function Menu(props) {
 	const theme = useTheme();
 
 	const [open, setOpen] = React.useState(false);
 	const [cannotOpen, setCannotOpen] = React.useState(false);
-
-	const [openChat, setOpenChat] = React.useState(false);
-    const [selectedChat, setSelectedChat] = React.useState(null);
-    const [minimizedChats, setMinimizedChats] = React.useState([]);
-
-    const handleMinimizeChat = (chatData) => {
-        setMinimizedChats([...minimizedChats, chatData]);
-    };
-
-    const handleChatOpen = (contact) => {
-        setSelectedChat(contact);
-        setOpenChat(true);
-    };
-    
-    const handleChatClose = () => {
-        setOpenChat(false);
-        setSelectedChat(null);
-    };
 
 	const themeSideMenu = createTheme({
 		typography: {
@@ -140,10 +90,6 @@ export default function SideMenu() {
 			].join(','),
 		}
 	})
-
-	const handleCannotOpen = (val) => {
-		setCannotOpen(val);
-	};
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -162,19 +108,22 @@ export default function SideMenu() {
 	const iconsRetos = [
 		<SlideshowOutlinedIcon/>,
 		<EmojiPeopleIcon/>,
+		<VideoLibraryIcon />
 	];
 
-	const isXs = useMediaQuery('(max-width:996px)'); // Adjust the width to match your "xs" breakpoint
+	const { dynamicComponent: DynamicComponent } = props;
 
-	// Call your function when the screen size matches "xs"
-	useEffect(() => {
-		if (isXs) {
-			handleDrawerClose();
-			handleCannotOpen(true);
-		} else {
-			handleCannotOpen(false);
-		}
-	}, [isXs]);
+	const menuOptions = [
+		{"name": "Inicio", "navigate": "/posts"},
+		{"name": "Perfil", "navigate": "/profile"},
+		{"name": "Rangos", "navigate": "/"}
+	]
+
+	const moreMenuOptions = [
+		{"name": "Retos", "navigate": "/challenges"},
+		{"name": "Participaciones", "navigate": "/"},
+		{"name": "Shorts", "navigate": "/shorts"}
+	]
 
 	return (
 		<Box sx={{ display: 'flex' }}>
@@ -227,52 +176,56 @@ export default function SideMenu() {
 
 			<ThemeProvider theme={themeSideMenu}>
 			<List sx={{ flexGrow: 1 }}>
-				{['Inicio', 'Perfil', 'Rangos'].map((text, index) => (
-					<Tooltip key={text} title={text} placement="right">
+				{menuOptions.map((option, index) => (
+					<Tooltip key={option.name} title={option.name} placement="right">
 					<ListItem  disablePadding sx={{ display: 'block' }}>
-					<ListItemButton
-						sx={{
-						minHeight: 48,
-						justifyContent: open ? 'initial' : 'center',
-						px: 2.5,
-						}}
-					>
-						<ListItemIcon
-						sx={{
-							minWidth: 0,
-							mr: open ? 3 : 'auto',
-							justifyContent: 'center',
-						}}
+					<NavLink to={option.navigate}>
+						<ListItemButton
+							sx={{
+							minHeight: 48,
+							justifyContent: open ? 'initial' : 'center',
+							px: 2.5,
+							}}
 						>
-						{icons[index]}
-						</ListItemIcon>
-						<ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-					</ListItemButton>
+							<ListItemIcon
+							sx={{
+								minWidth: 0,
+								mr: open ? 3 : 'auto',
+								justifyContent: 'center',
+							}}
+							>
+							{icons[index]}
+							</ListItemIcon>
+							<ListItemText primary={option.name} sx={{ opacity: open ? 1 : 0 }} />
+						</ListItemButton>
+					</NavLink>
 					</ListItem>
 					</Tooltip>
 				))}
 
-				{['Retos', 'Participaciones'].map((text, index) => (
-					<Tooltip key={text} title={text} placement="right" >
+				{moreMenuOptions.map((option, index) => (
+					<Tooltip key={option.name} title={option.name} placement="right" >
 					<ListItem  disablePadding sx={{ display:  { xs: 'flex', md: 'none' }, }}>
-					<ListItemButton
-						sx={{
-						minHeight: 48,
-						justifyContent: open ? 'initial' : 'center',
-						px: 2.5,
-						}}
-					>
-						<ListItemIcon
-						sx={{
-							minWidth: 0,
-							mr: open ? 3 : 'auto',
-							justifyContent: 'center',
-						}}
+					<NavLink to={option.navigate}>
+						<ListItemButton
+							sx={{
+							minHeight: 48,
+							justifyContent: open ? 'initial' : 'center',
+							px: 2.5,
+							}}
 						>
-						{iconsRetos[index]}
-						</ListItemIcon>
-						<ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-					</ListItemButton>
+							<ListItemIcon
+							sx={{
+								minWidth: 0,
+								mr: open ? 3 : 'auto',
+								justifyContent: 'center',
+							}}
+							>
+							{iconsRetos[index]}
+							</ListItemIcon>
+							<ListItemText primary={option.name} sx={{ opacity: open ? 1 : 0 }} />
+						</ListItemButton>
+					</NavLink>
 					</ListItem>
 					</Tooltip>
 				))}
@@ -311,35 +264,8 @@ export default function SideMenu() {
 		<Box component="main" sx={{ flexGrow: 1, p: 3, mt:2, mr:1}}>
 			<DrawerHeader />
 
-			<Grid container spacing={2} marginRight={2}>
-				<Grid container item xs={isXs ? 12 : 10} 
-					direction="column"
-					justifyContent="flex-start"
-					alignItems="center"
-					gap={4}
-				>
-					{Array.from(Array(6)).map((_, index) => (
-						<Post key={index}>xs=8</Post>
-					))}
-				</Grid>
-				{isXs ? null : <Grid item xs={2} container
-					direction="column"
-					justifyContent="flex-start"
-					alignItems="flex-end">
-					
-					<ContactList title={"Chats"} handleChatOpen={handleChatOpen} contacts={contacts} mtbool={false}></ContactList>
-					<ContactList title={"Seguidores"} contacts={contacts} mtbool={true}></ContactList>
-
-					
-				</Grid>}
-			</Grid>
+			{DynamicComponent && <DynamicComponent />}
 		</Box>
-		<ChatPopup
-						open={openChat}
-						onClose={handleChatClose}
-						chatData={selectedChat}
-						onMinimize={handleMinimizeChat}
-					/>
 		</Box>
 	);
 }

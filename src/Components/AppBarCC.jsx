@@ -18,6 +18,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import { NavLink } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -166,7 +167,9 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
         >
 
         <MenuItem>
-            <Button variant="outlined" color="primary" disableElevation >Retos</Button>
+            <NavLink to="/challenges">
+                <Button variant="outlined" color="primary" disableElevation >Retos</Button>
+            </NavLink>
         </MenuItem>
         <MenuItem>
             <Button variant="contained" color="secondary" disableElevation >Participaciones</Button>
@@ -273,11 +276,17 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
              </Box>}
 
             <Stack direction="row" spacing={2} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'} }}>
-                <Button variant="outlined" color="primary" disableElevation >Retos</Button>
+                <NavLink to="/challenges">
+                    <Button variant="outlined" color="primary" disableElevation >Retos</Button>
+                </NavLink>
+                
                 <Button variant="contained" color="secondary" disableElevation >Participaciones</Button>
-                <IconButton aria-label="video">
-                    <VideoLibraryIcon />
-                </IconButton>
+                <NavLink to="/shorts">
+                    <IconButton aria-label="video">
+                        <VideoLibraryIcon />
+                    </IconButton>
+                </NavLink>
+                
             </Stack>
             
 

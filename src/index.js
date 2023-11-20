@@ -1,16 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import SideMenu from './Components/SideMenu';
-import ProfileEditPage from './Components/ProfileEditPage'
-import ChallengeShort from './Components/ChallengeShort'
+
+import App from './App';
+
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider, createTheme } from '@mui/material';
 
-import {
-	createBrowserRouter,
-	RouterProvider,
-  } from "react-router-dom";
 
 const theme = createTheme({
 	typography: {
@@ -49,7 +45,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<ThemeProvider theme={theme}>
-			<ChallengeShort />
+			<App />
 		</ThemeProvider>
 	</React.StrictMode>
 );

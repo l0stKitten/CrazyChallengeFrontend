@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+	BrowserRouter as Router,
+	Route,
+	Routes,
+} from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import PostsPage from "./Pages/PostsPage";
+import ChallengeShortPage from "./Pages/ChallengeShortPage";
+import ChallengePage from "./Pages/ChallengePage";
+import ProfileEditPage from "./Pages/ProfileEditPage";
+
+export default function App() {
+	return (
+		<Router>
+
+		<Routes>
+			{/*<Route path="/login" element={} />*/}
+			{/*<Route path="/register" element={} />*/}
+			<Route path="/posts" element={<PostsPage/>} />
+			<Route path="/challenges" element={<ChallengePage/>} />
+			<Route path="/shorts" element={<ChallengeShortPage/>} />
+			<Route path="/profile" element={<ProfileEditPage/>} />
+			<Route path="welcome" element={<p>Welcome!</p>} />
+			{/*<Route path="*" element={<NotFoundPage />} />*/}
+		</Routes>
+		</Router>
+	);
 }
-
-export default App;
