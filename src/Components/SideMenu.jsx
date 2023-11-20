@@ -1,10 +1,11 @@
-import React, {Fragment, useEffect} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 import { createTheme, styled, useTheme } from '@mui/material/styles';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import AppBarCC from './AppBarCC'
 import Post from './Post'
 import ContactList from './CardSM'
+import ChatPopup from './ChatPopup'
 
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -113,6 +114,24 @@ export default function SideMenu() {
 
 	const [open, setOpen] = React.useState(false);
 	const [cannotOpen, setCannotOpen] = React.useState(false);
+
+	const [openChat, setOpenChat] = React.useState(false);
+    const [selectedChat, setSelectedChat] = React.useState(null);
+    const [minimizedChats, setMinimizedChats] = React.useState([]);
+
+    const handleMinimizeChat = (chatData) => {
+        setMinimizedChats([...minimizedChats, chatData]);
+    };
+
+    const handleChatOpen = (contact) => {
+        setSelectedChat(contact);
+        setOpenChat(true);
+    };
+    
+    const handleChatClose = () => {
+        setOpenChat(false);
+        setSelectedChat(null);
+    };
 
 	const themeSideMenu = createTheme({
 		typography: {
@@ -308,12 +327,19 @@ export default function SideMenu() {
 					justifyContent="flex-start"
 					alignItems="flex-end">
 					
-					<ContactList title={"Chats"} contacts={contacts} mtbool={false}></ContactList>
+					<ContactList title={"Chats"} handleChatOpen={handleChatOpen} contacts={contacts} mtbool={false}></ContactList>
 					<ContactList title={"Seguidores"} contacts={contacts} mtbool={true}></ContactList>
+
+					
 				</Grid>}
 			</Grid>
 		</Box>
-
+		<ChatPopup
+						open={openChat}
+						onClose={handleChatClose}
+						chatData={selectedChat}
+						onMinimize={handleMinimizeChat}
+					/>
 		</Box>
 	);
 }

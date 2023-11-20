@@ -11,7 +11,7 @@ import CardContent from '@mui/material/CardContent';
 import { createTheme} from '@mui/material/styles';
 import { ThemeProvider } from '@emotion/react';
 
-const ContactList = ({ title, contacts, mtbool }) => {
+const ContactList = ({ title, contacts, mtbool, handleChatOpen}) => {
     const [showAll, setShowAll] = useState(false);
 
     const visibleContacts = showAll ? contacts : contacts.slice(0, 5);
@@ -47,12 +47,12 @@ const ContactList = ({ title, contacts, mtbool }) => {
                 >
                     {visibleContacts.map((contact, index) => (
                         <Grid item xs={12} key={contact.id} >
-                        <Grid container wrap="nowrap" alignItems="center">
-                            <Grid item>
-                            <Avatar alt={contact.name} src="/path-to-avatar-image.jpg" />
+                        <Grid container wrap="nowrap" alignItems="center" onClick={() => handleChatOpen(contact)}>
+                            <Grid item >
+                                <Avatar alt={contact.name} src="/path-to-avatar-image.jpg" />
                             </Grid>
                             <Grid item marginLeft={2}>
-                            <Typography variant="body2">{contact.name}</Typography>
+                                <Typography variant="body2">{contact.name}</Typography>
                             </Grid>
                         </Grid>
                         </Grid>

@@ -2,10 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import SideMenu from './Components/SideMenu';
+import ProfileEditPage from './Components/ProfileEditPage'
 import ChallengeShort from './Components/ChallengeShort'
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider, createTheme } from '@mui/material';
 
+import {
+	createBrowserRouter,
+	RouterProvider,
+  } from "react-router-dom";
 
 const theme = createTheme({
 	typography: {

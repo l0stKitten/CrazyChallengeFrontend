@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Button, IconButton, Slide, Typography, Grid } from '@mui/material';
+import React, { useState, useEffect, useCallback } from 'react';
+import { IconButton, Slide, Grid } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ReactPlayer from 'react-player';
@@ -14,13 +14,13 @@ const StyledPlayerWrapper = styled('div')({
 const VideoCarousel = ({ videos  }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 
-	const handleNext = () => {
+	const handleNext = useCallback(() => {
 		setCurrentIndex((prevIndex) => (prevIndex < videos.length - 1 ? prevIndex + 1 : 0));
-	};
-
-	const handlePrev = () => {
+	}, [setCurrentIndex, videos.length]);
+	
+	const handlePrev = useCallback(() => {
 		setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : videos.length - 1));
-	};
+	}, [setCurrentIndex, videos.length]);
 
 	useEffect(() => {
 		const handleScroll = (event) => {
@@ -39,7 +39,7 @@ const VideoCarousel = ({ videos  }) => {
 
 		return () => {
 		// Cleanup the event listener on component unmount
-		window.removeEventListener('wheel', handleScroll);
+			window.removeEventListener('wheel', handleScroll);
 		};
 	}, [handlePrev, handleNext]);
 
@@ -57,11 +57,10 @@ const VideoCarousel = ({ videos  }) => {
 								url={videos[currentIndex]}
 								playing={true}
 								controls={true}
-								width={456} // Adjust the width as needed
-								height={811} // Adjust the height as needed
+								width={'100%'} // Adjust the width as needed
+								height={'79vh'} // Adjust the height as needed
 						/>
 					</StyledPlayerWrapper>
-					
 				</Slide>
 			</Grid>
 			<Grid item xs={1} sx={{ display: {xs:'none', md:'flex'}, justifyContent: 'flex-end', p:0 }}>
