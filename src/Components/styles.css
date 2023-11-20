@@ -1,0 +1,81 @@
+/* App.css */
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+/* ProfileHeader.css */
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-image {
+  border-radius: 50%;
+  margin-left: 10px;
+  position: absolute;
+  border: 10px solid white;
+}
+
+.portada {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: -40px;
+  max-height: 250px;
+}
+
+.portada img {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+/* Agrega estos estilos a tu archivo de estilos CSS para ChallengeProfileInfo */
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-buttons {
+  align-self: flex-end;
+  margin-left: auto;
+  margin-top: 40px;
+}
+
+.challenge-creator {
+  font-size: 110%;
+}
+
+.fecha-challenge{
+  display: flex;
+  color: "gray"
+}
+
+.fecha-challenge > p {
+  margin-right: 15px;
+}
+
+.fecha-challenge p {
+  color: #777777;
+}
+
+.challenge {
+  margin: 0;
+}
+
+.challenge-info {
+  justify-content: space-between;
+}
+
+/* Estilos para los elementos individuales dentro de .challenge-info */
+.descripcion-challenge,
+.fecha-challenge,
+.participantes-challenge,
+.fecha-inicio-challenge,
+.fecha-fin-challenge {
+  margin: 0; /* Establecer el margen a cero para pegar los elementos */
+}
+
+/* Ajustes adicionales según sea necesario */
