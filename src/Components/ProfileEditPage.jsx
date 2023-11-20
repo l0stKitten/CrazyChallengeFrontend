@@ -1,6 +1,9 @@
 import React, {Fragment, useEffect} from 'react'
 import { createTheme, styled, useTheme } from '@mui/material/styles';
 import AppBarCC from './AppBarCC'
+import Post from './Post'
+import ContactList from './CardSM'
+import ProfileEdit from './ProfileEdit'
 
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -20,14 +23,11 @@ import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import { ThemeProvider } from '@emotion/react';
 import Tooltip from '@mui/material/Tooltip';
+import Grid from '@mui/material/Grid';
 import SlideshowOutlinedIcon from '@mui/icons-material/SlideshowOutlined';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 
 import { useMediaQuery } from '@mui/material';
-import VideoCarousel from './VideoCarousel';
-import video from '../short/beeandpuppycat.mp4';
-import video2 from '../short/pretty-patrick.mp4';
-import video3 from '../short/bee-and-puppycat-dancing-loop.mp4';
 
 const drawerWidth = 245;
 
@@ -85,14 +85,29 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 	color: theme.palette.text.secondary,
 }));*/
 
-const videoList = [
-	video, 
-	video2, 
-	video3	
-]
 
+const contacts = [{"id":1,"name":"Grange Slight"},
+{"id":2,"name":"Cleveland Staniland"},
+{"id":3,"name":"Libbi Felderer"},
+{"id":4,"name":"Letizia Synke"},
+{"id":5,"name":"Rora Rickersey"},
+{"id":6,"name":"Anjela Giacomoni"},
+{"id":7,"name":"Jeramie De Cristofalo"},
+{"id":8,"name":"Charin Mugglestone"},
+{"id":9,"name":"Ludovico Howatt"},
+{"id":10,"name":"Dorie Mendez"},
+{"id":11,"name":"Erroll Youngs"},
+{"id":12,"name":"Virginie Melbourne"},
+{"id":13,"name":"Erin Whistlecraft"},
+{"id":14,"name":"Josey Brignall"},
+{"id":15,"name":"Carly Lago"},
+{"id":16,"name":"Aveline Chasemoore"},
+{"id":17,"name":"Clarita Banbrook"},
+{"id":18,"name":"Layton Twidle"},
+{"id":19,"name":"Mariana Salthouse"},
+{"id":20,"name":"Humphrey Zolini"}]
 
-export default function ChallengeShort() {
+export default function ProfileEditPage() {
 	const theme = useTheme();
 
 	const [open, setOpen] = React.useState(false);
@@ -276,7 +291,7 @@ export default function ChallengeShort() {
 		<Box component="main" sx={{ flexGrow: 1, p: 3, mt:2, mr:1}}>
 			<DrawerHeader />
 
-			<VideoCarousel videos={videoList}></VideoCarousel>
+			<ProfileEdit></ProfileEdit>
 		</Box>
 
 		</Box>
