@@ -9,6 +9,7 @@ import ChallengeShortPage from "./Pages/ChallengeShortPage";
 import ChallengePage from "./Pages/ChallengePage";
 import ProfileEditPage from "./Pages/ProfileEditPage";
 import LoginForm from "./Pages/UserLoginPage"
+import RegisterForm from "./Pages/UserRegisterPage"
 
 export default function App() {
 	return (
@@ -16,7 +17,7 @@ export default function App() {
 
 		<Routes>
 			<Route path="/" element={<LoginForm/>} />
-			{/*<Route path="/register" element={} />*/}
+			<Route path="/register" element={<RegisterForm/>} />
 			<Route path="/posts" element={<PostsPage/>} />
 			<Route path="/challenges" element={<ChallengePage/>} />
 			<Route path="/shorts" element={<ChallengeShortPage/>} />
