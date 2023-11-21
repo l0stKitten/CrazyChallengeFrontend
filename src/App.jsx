@@ -8,13 +8,14 @@ import PostsPage from "./Pages/PostsPage";
 import ChallengeShortPage from "./Pages/ChallengeShortPage";
 import ChallengePage from "./Pages/ChallengePage";
 import ProfileEditPage from "./Pages/ProfileEditPage";
+import LoginForm from "./Pages/UserLoginPage"
 
 export default function App() {
 	return (
 		<Router>
 
 		<Routes>
-			{/*<Route path="/login" element={} />*/}
+			<Route path="/" element={<LoginForm/>} />
 			{/*<Route path="/register" element={} />*/}
 			<Route path="/posts" element={<PostsPage/>} />
 			<Route path="/challenges" element={<ChallengePage/>} />
