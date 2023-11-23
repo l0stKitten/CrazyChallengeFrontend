@@ -6,8 +6,6 @@ import App from './App';
 
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider, createTheme } from '@mui/material';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 
 const theme = createTheme({
@@ -28,7 +26,7 @@ const theme = createTheme({
 		  default: '#f4f5f9',
 		},
 		error: {
-		  main: '#AC20EE',
+		  main: '#ffffff',
 		},
 		warning: {
 		  main: '#FFBE1C',
@@ -46,12 +44,9 @@ const theme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
-		<LocalizationProvider dateAdapter={AdapterDayjs}>
-			<ThemeProvider theme={theme}>
-				<App />
-			</ThemeProvider>
-		</LocalizationProvider>
-		
+		<ThemeProvider theme={theme}>
+			<App />
+		</ThemeProvider>
 	</React.StrictMode>
 );
 

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import dayjs from 'dayjs';
 
 import { Button, TextField, Typography, Link, Grid, Box, Divider } from '@mui/material';
 import Radio from '@mui/material/Radio';
@@ -21,6 +22,7 @@ const schema = yup.object().shape({
 	fullname: yup.string().required("Se requiere el nombre completo"),
 	email: yup.string().required("Se requiere el email"),
 	gender: yup.string().required("Se requiere el género"),
+	dateOfBirth: yup.string().required("Se requiere la fecha de nacimiento"),
 	password: yup.string().required('Se requiere el password').min(6, 'Debe tener al menos 6 caracteres'),
 	confirmPassword: yup
 	  .string()
@@ -36,18 +38,19 @@ const RegisterForm = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		control 
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
 	
 	const onSubmit = (data) => console.log(data)
-
+	const [value, setValue] = useState(null);
 
 	return (
 		<Box sx={{ flexGrow: 1, height: '100vh' }}>
 		<Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
 			<Box gridColumn="span 8">
-				<img src={ImageCrazyChallenge} className='image-login' alt='imagen-login' style={{ height: '100vh', width: '100%'}} />
+				<img src={ImageCrazyChallenge} className='image-login' alt='imagen-login' style={{ maxHeight: '100vh', width: '100%', height: '100%'}} />
 			</Box>
 
 			<Box gridColumn="span 4">
@@ -95,20 +98,42 @@ const RegisterForm = () => {
 
 				<Grid item xs={12}>
 					<FormControl>
-						<FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel>
+						<FormLabel id="demo-controlled-radio-buttons-group">Género</FormLabel>
 						<RadioGroup
 							aria-labelledby="demo-controlled-radio-buttons-group"
 							name="gender" 
-							{...register("gender")}
 						>
-							<FormControlLabel value="female" control={<Radio />} label="Female" />
-							<FormControlLabel value="male" control={<Radio />} label="Male" />
+							<FormControlLabel value="female" control={<Radio />} label="Mujer" {...register("gender")} />
+							<FormControlLabel value="male" control={<Radio />} label="Hombre" {...register("gender")}/>
+							<FormControlLabel value="otros" control={<Radio />} label="Otros" {...register("gender")}/>
 						</RadioGroup>
+						<Typography variant="caption" color={'error'}>
+							{errors.gender?.message}
+						</Typography>
 					</FormControl>
 				</Grid>
 
 				<Grid item xs={12}>
-					<DatePicker label="Fecha de Nacimiento" />
+					<Controller
+						name="dateOfBirth"
+						control={control}
+						render={({ field }) => (
+							<div>
+								<DatePicker 
+									label="Fecha de Nacimiento"
+									value={value}
+									onChange={(newValue) => {
+										setValue(newValue);
+										field.onChange(newValue);
+									}}
+								/>
+								<br></br>
+								<Typography variant="caption" color={'error'}>
+									{errors.dateOfBirth?.message}
+								</Typography>
+							</div>
+						)}
+					/>
 				</Grid>
 
 				<Grid item xs={12}>
