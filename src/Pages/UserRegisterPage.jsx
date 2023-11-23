@@ -1,106 +1,168 @@
 import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
 import { Button, TextField, Typography, Link, Grid, Box, Divider } from '@mui/material';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
+
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import '../Components/Challenge/styles.css';
 import ImageCrazyChallenge from '../img/crazy_challenge.png'
 
+const schema = yup.object().shape({
+	username: yup.string().required("Se requiere el nombre de usuario"),
+	fullname: yup.string().required("Se requiere el nombre completo"),
+	email: yup.string().required("Se requiere el email"),
+	gender: yup.string().required("Se requiere el género"),
+	password: yup.string().required('Se requiere el password').min(6, 'Debe tener al menos 6 caracteres'),
+	confirmPassword: yup
+	  .string()
+	  .oneOf([yup.ref('password'), null], 'Las contraseñas no son iguales')
+	  .required('Se requiere confirmar el password')
+	  .min(6, 'Debe tener al menos 6 caracteres'),
+});
+
+
 const RegisterForm = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Las contraseñas no coinciden");
-      return;
-    }
-    
-    console.log('First Name:', firstName);
-    console.log('Last Name:', lastName);
-    console.log('Email:', email);
-    console.log('Password:', password);
-  };
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		resolver: yupResolver(schema),
+	})
+	
+	const onSubmit = (data) => console.log(data)
 
-  return (
-    <Box sx={{ flexGrow: 1, height: '100vh' }}>
-      <Grid className='login-container' container spacing={2}>
-        <Grid item xs={8}>
-          <img src={ImageCrazyChallenge} className='image-login' alt='imagen-login' style={{ maxWidth: '100%', height: '99vh', width: '100%' }} />
-        </Grid>
-        <Grid container item xs={4} paddingRight={2} sx={{ justifyContent: 'center', marginTop: '50px' }}>
-          <Grid item xs={8}>
-            <form onSubmit={handleSubmit}>
-              <Typography variant="h4" gutterBottom>
-                Registro de Usuario
-              </Typography>
-              <TextField
-                label="Nombre"
-                type="text"
-                variant="outlined"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                fullWidth
-                required
-              />
-              <TextField
-                label="Apellido"
-                type="text"
-                variant="outlined"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                fullWidth
-                required
-              />
-              <TextField
-                label="Correo electrónico"
-                type="email"
-                variant="outlined"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                fullWidth
-                required
-              />
-              <TextField
-                label="Contraseña"
-                type="password"
-                variant="outlined"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                fullWidth
-                required
-                minLength={6}
-              />
-              <TextField
-                label="Repetir Contraseña"
-                type="password"
-                variant="outlined"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                fullWidth
-                required
-                minLength={6}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                style={{ marginTop: '1rem' }}
-              >
-                Registrar
-              </Button>
 
-              <Divider mt={4} style={{ margin: '20px 0' }} />
-              <Link href="#" variant="body2" style={{ marginTop: '1rem' }}>
-                ¿Ya tienes una cuenta? Inicia sesión
-              </Link>
-            </form>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+	return (
+		<Box sx={{ flexGrow: 1, height: '100vh' }}>
+		<Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
+			<Box gridColumn="span 8">
+				<img src={ImageCrazyChallenge} className='image-login' alt='imagen-login' style={{ height: '100vh', width: '100%'}} />
+			</Box>
+
+			<Box gridColumn="span 4">
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<Grid container direction="column" justifyContent="center" alignItems="flex-start" spacing={2} sx={{ ml:3, mt:4 }}>
+				
+				<Grid item xs={12}>
+					<Typography variant="h4" gutterBottom>
+						Registro de Usuario
+					</Typography>
+				</Grid>
+
+				<Grid item xs={12}>
+					<TextField
+						label="Nombre de Usuario"
+						type="text"
+						variant="outlined"
+						fullWidth
+						required
+						{...register("username")}
+					/>
+				</Grid>
+
+				<Grid item xs={12}>
+					<TextField
+						label="Nombre Completo"
+						type="text"
+						variant="outlined"
+						fullWidth
+						required
+						{...register("fullname")}
+					/>
+				</Grid>
+
+				<Grid item xs={12}>
+					<TextField
+						label="Correo electrónico"
+						type="email"
+						variant="outlined"
+						fullWidth
+						required
+						{...register("email")}
+					/>
+				</Grid>
+
+				<Grid item xs={12}>
+					<FormControl>
+						<FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel>
+						<RadioGroup
+							aria-labelledby="demo-controlled-radio-buttons-group"
+							name="gender" 
+							{...register("gender")}
+						>
+							<FormControlLabel value="female" control={<Radio />} label="Female" />
+							<FormControlLabel value="male" control={<Radio />} label="Male" />
+						</RadioGroup>
+					</FormControl>
+				</Grid>
+
+				<Grid item xs={12}>
+					<DatePicker label="Fecha de Nacimiento" />
+				</Grid>
+
+				<Grid item xs={12}>
+					<TextField
+						label="Contraseña"
+						type="password"
+						variant="outlined"
+						fullWidth
+						required
+						error={!!errors.password}
+						helperText={errors.password?.message}
+						{...register("password")}
+					/>
+				</Grid>
+
+				<Grid item xs={12}>
+					<TextField
+						label="Repetir Contraseña"
+						type="password"
+						variant="outlined"
+						fullWidth
+						required
+						error={!!errors.confirmPassword}
+						helperText={errors.confirmPassword?.message}
+						{...register("confirmPassword")}
+					/>
+				</Grid>
+
+				<Grid item xs={12}>
+					<Button
+						type="submit"
+						variant="contained"
+						fullWidth
+						style={{ marginTop: '1rem' }}
+					>
+						Registrar
+					</Button>
+				</Grid>
+
+				<Divider mt={12} style={{ margin: '20px 0' }} />
+
+				<Grid item xs={12}>
+					<Link href="#" variant="body2" style={{ marginTop: '1rem' }}>
+						¿Ya tienes una cuenta? Inicia sesión
+					</Link>
+				</Grid>
+				
+				</Grid>
+			</form>
+			</Box>
+			
+		</Box>
+		</Box>
+	);
 };
 
 export default RegisterForm;
