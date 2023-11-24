@@ -10,7 +10,7 @@ import ChallengePage from "./Pages/ChallengePage";
 import ProfileEditPage from "./Pages/ProfileEditPage";
 import LoginForm from "./Pages/UserLoginPage"
 import RegisterForm from "./Pages/UserRegisterPage"
-import PreferencePage from "./Pages/PreferencePage"
+import WelcomePage from "./Pages/WelcomePage";
 
 export default function App() {
 	return (
@@ -23,8 +23,7 @@ export default function App() {
 			<Route path="/challenges" element={<ChallengePage/>} />
 			<Route path="/shorts" element={<ChallengeShortPage/>} />
 			<Route path="/profile" element={<ProfileEditPage/>} />
-			<Route path="welcome" element={<p>Welcome!</p>} />
-			<Route path="/preferences" element={<PreferencePage/>} />
+			<Route path="/welcome" element={<WelcomePage/>} />
 			{/*<Route path="*" element={<NotFoundPage />} />*/}
 		</Routes>
 		</Router>

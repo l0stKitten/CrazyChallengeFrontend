@@ -1,29 +1,32 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+import RegisterForm from '../Components/RegisterPage';
+import Preferences from '../Components/PreferencePage'
+import WelcomePage from './WelcomePage';
+import RegisterProfile from '../Components/RegisterProfile';
+import RegisterConfirmation from '../Components/RegisterCofirmation';
+
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import dayjs from 'dayjs';
-
-import { Button, TextField, Typography, Link, Grid, Box, Divider } from '@mui/material';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 
 
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
-import '../Components/Challenge/styles.css';
-import ImageCrazyChallenge from '../img/crazy_challenge.png'
-
+const steps = ['Registra tus datos', 'Elige tus preferencias', 'Edita tu perfil', 'Crea tu cuenta'];
 const schema = yup.object().shape({
 	username: yup.string().required("Se requiere el nombre de usuario"),
 	fullname: yup.string().required("Se requiere el nombre completo"),
 	email: yup.string().required("Se requiere el email"),
 	gender: yup.string().required("Se requiere el género"),
-	dateOfBirth: yup.string().required("Se requiere la fecha de nacimiento"),
 	password: yup.string().required('Se requiere el password').min(6, 'Debe tener al menos 6 caracteres'),
+    preferences: yup.array().required('Selecciona al menos una categoría'),
+    avatar: yup.string().required().default("https://www.iprcenter.gov/image-repository/blank-profile-picture.png/@@images/image.png"),
+    biography: yup.string().required().default(`Hola, soy ${yup.ref(`username`)}`),
 	confirmPassword: yup
 	  .string()
 	  .oneOf([yup.ref('password'), null], 'Las contraseñas no son iguales')
@@ -31,163 +34,129 @@ const schema = yup.object().shape({
 	  .min(6, 'Debe tener al menos 6 caracteres'),
 });
 
+export default function UserRegisterPage() {
+    const [activeStep, setActiveStep] = React.useState(0);
+    const [skipped, setSkipped] = React.useState(new Set());
 
-const RegisterForm = () => {
-
-	const {
+    const {
 		register,
 		handleSubmit,
+        watch,
 		formState: { errors },
-		control 
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
 	
 	const onSubmit = (data) => console.log(data)
-	const [value, setValue] = useState(null);
 
-	return (
-		<Box sx={{ flexGrow: 1, height: '100vh' }}>
-		<Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
-			<Box gridColumn="span 8">
-				<img src={ImageCrazyChallenge} className='image-login' alt='imagen-login' style={{ maxHeight: '100vh', width: '100%', height: '100%'}} />
-			</Box>
+    const isStepOptional = (step) => {
+        return step === 2;
+    };
 
-			<Box gridColumn="span 4">
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<Grid container direction="column" justifyContent="center" alignItems="flex-start" spacing={2} sx={{ ml:3, mt:4 }}>
-				
-				<Grid item xs={12}>
-					<Typography variant="h4" gutterBottom>
-						Registro de Usuario
-					</Typography>
-				</Grid>
+    const isStepSkipped = (step) => {
+        return skipped.has(step);
+    };
 
-				<Grid item xs={12}>
-					<TextField
-						label="Nombre de Usuario"
-						type="text"
-						variant="outlined"
-						fullWidth
-						required
-						{...register("username")}
-					/>
-				</Grid>
+    const handleNext = () => {
+        let newSkipped = skipped;
+        if (isStepSkipped(activeStep)) {
+        newSkipped = new Set(newSkipped.values());
+        newSkipped.delete(activeStep);
+        }
 
-				<Grid item xs={12}>
-					<TextField
-						label="Nombre Completo"
-						type="text"
-						variant="outlined"
-						fullWidth
-						required
-						{...register("fullname")}
-					/>
-				</Grid>
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
+    };
 
-				<Grid item xs={12}>
-					<TextField
-						label="Correo electrónico"
-						type="email"
-						variant="outlined"
-						fullWidth
-						required
-						{...register("email")}
-					/>
-				</Grid>
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
 
-				<Grid item xs={12}>
-					<FormControl>
-						<FormLabel id="demo-controlled-radio-buttons-group">Género</FormLabel>
-						<RadioGroup
-							aria-labelledby="demo-controlled-radio-buttons-group"
-							name="gender" 
-						>
-							<FormControlLabel value="female" control={<Radio />} label="Mujer" {...register("gender")} />
-							<FormControlLabel value="male" control={<Radio />} label="Hombre" {...register("gender")}/>
-							<FormControlLabel value="otros" control={<Radio />} label="Otros" {...register("gender")}/>
-						</RadioGroup>
-						<Typography variant="caption" color={'error'}>
-							{errors.gender?.message}
-						</Typography>
-					</FormControl>
-				</Grid>
+    const handleSkip = () => {
+        if (!isStepOptional(activeStep)) {
+        // You probably want to guard against something like this,
+        // it should never occur unless someone's actively trying to break something.
+        throw new Error("You can't skip a step that isn't optional.");
+        }
 
-				<Grid item xs={12}>
-					<Controller
-						name="dateOfBirth"
-						control={control}
-						render={({ field }) => (
-							<div>
-								<DatePicker 
-									label="Fecha de Nacimiento"
-									value={value}
-									onChange={(newValue) => {
-										setValue(newValue);
-										field.onChange(newValue);
-									}}
-								/>
-								<br></br>
-								<Typography variant="caption" color={'error'}>
-									{errors.dateOfBirth?.message}
-								</Typography>
-							</div>
-						)}
-					/>
-				</Grid>
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped((prevSkipped) => {
+        const newSkipped = new Set(prevSkipped.values());
+        newSkipped.add(activeStep);
+        return newSkipped;
+        });
+    };
 
-				<Grid item xs={12}>
-					<TextField
-						label="Contraseña"
-						type="password"
-						variant="outlined"
-						fullWidth
-						required
-						error={!!errors.password}
-						helperText={errors.password?.message}
-						{...register("password")}
-					/>
-				</Grid>
+    return (
+        <Box sx={{ width: '100%' }}>
+        <Stepper activeStep={activeStep}>
+            {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
+            if (isStepOptional(index)) {
+                labelProps.optional = (
+                <Typography variant="caption">Optional</Typography>
+                );
+            }
+            if (isStepSkipped(index)) {
+                stepProps.completed = false;
+            }
+            return (
+                <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
+                </Step>
+            );
+            })}
+        </Stepper>
 
-				<Grid item xs={12}>
-					<TextField
-						label="Repetir Contraseña"
-						type="password"
-						variant="outlined"
-						fullWidth
-						required
-						error={!!errors.confirmPassword}
-						helperText={errors.confirmPassword?.message}
-						{...register("confirmPassword")}
-					/>
-				</Grid>
+        {activeStep === steps.length ? (
+            <React.Fragment>
+            <WelcomePage></WelcomePage>
+            </React.Fragment>
+        ) : (
+            <React.Fragment>
+            
+                    { activeStep + 1 === 1 && <section style={{marginTop:'16px'}}>
+                        <RegisterForm register={register} errors={errors} onSubmit={onSubmit} handleSubmit={handleSubmit}></RegisterForm>
+                    </section>}
 
-				<Grid item xs={12}>
-					<Button
-						type="submit"
-						variant="contained"
-						fullWidth
-						style={{ marginTop: '1rem' }}
-					>
-						Registrar
-					</Button>
-				</Grid>
+                    { activeStep + 1 === 2 && <section>
+                        <Preferences></Preferences>
+                    </section>}
 
-				<Divider mt={12} style={{ margin: '20px 0' }} />
+                    { activeStep + 1 === 3 && <section>
+                        <RegisterProfile></RegisterProfile>
+                    </section>}
 
-				<Grid item xs={12}>
-					<Link href="#" variant="body2" style={{ marginTop: '1rem' }}>
-						¿Ya tienes una cuenta? Inicia sesión
-					</Link>
-				</Grid>
-				
-				</Grid>
-			</form>
-			</Box>
-			
-		</Box>
-		</Box>
-	);
-};
+                    { activeStep + 1 === 4 && <section>
+                        <RegisterConfirmation></RegisterConfirmation>
+                    </section>}
+                
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+                >
+                Back
+                </Button>
+                <Box sx={{ flex: '1 1 auto' }} />
+                {isStepOptional(activeStep) && (
+                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                    Skip
+                </Button>
+                )}
 
-export default RegisterForm;
+                <Button onClick={handleNext}>
+                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                </Button>
+            </Box>
+            <prev>
+                {JSON.stringify(watch(), null, 2)}
+            </prev>
+            </React.Fragment>
+        )}
+        </Box>
+    );
+}
