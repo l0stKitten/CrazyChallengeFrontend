@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -12,7 +12,7 @@ import WelcomePage from './WelcomePage';
 import RegisterProfile from '../Components/RegisterProfile';
 import RegisterConfirmation from '../Components/RegisterCofirmation';
 
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -43,11 +43,25 @@ export default function UserRegisterPage() {
 		handleSubmit,
         watch,
 		formState: { errors },
+		control 
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
 	
 	const onSubmit = (data) => console.log(data)
+
+    const [selectedButtons, setSelectedButtons] = useState([]);
+
+    const handleSetButtonStyle = (pref) => {
+        if (selectedButtons.includes(pref.name)) {
+        // If the button is already selected, remove it from the array and set the style to "outlined"
+        setSelectedButtons((prev) => prev.filter((item) => item !== pref.name));
+        } else {
+        // If the button is not selected, add it to the array and set the style to "contained"
+        setSelectedButtons((prev) => [...prev, pref.name]);
+        }
+
+    };
 
     const isStepOptional = (step) => {
         return step === 2;
@@ -117,11 +131,11 @@ export default function UserRegisterPage() {
             <React.Fragment>
             
                     { activeStep + 1 === 1 && <section style={{marginTop:'16px'}}>
-                        <RegisterForm register={register} errors={errors} onSubmit={onSubmit} handleSubmit={handleSubmit}></RegisterForm>
+                        <RegisterForm register={register} errors={errors} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} ></RegisterForm>
                     </section>}
 
                     { activeStep + 1 === 2 && <section>
-                        <Preferences></Preferences>
+                        <Preferences selectedButtons={selectedButtons} handleSetButtonStyle={handleSetButtonStyle}></Preferences>
                     </section>}
 
                     { activeStep + 1 === 3 && <section>
@@ -152,11 +166,12 @@ export default function UserRegisterPage() {
                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                 </Button>
             </Box>
+            </React.Fragment>
+        )}
+
             <prev>
                 {JSON.stringify(watch(), null, 2)}
             </prev>
-            </React.Fragment>
-        )}
         </Box>
     );
 }

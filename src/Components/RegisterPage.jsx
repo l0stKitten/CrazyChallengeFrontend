@@ -1,9 +1,11 @@
+import React, {useState} from 'react';
 import { Button, TextField, Typography, Link, Grid, Box, Divider } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { Controller } from 'react-hook-form';
 
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -14,14 +16,15 @@ import ImageCrazyChallenge from '../img/crazy_challenge.png'
 
 
 
-const RegisterForm = ({register, errors, onSubmit, handleSubmit}) => {
+const RegisterForm = ({register, errors, onSubmit, handleSubmit, control}) => {
 
+	const [value, setValue] = useState(null);
 
 	return (
 		<Box sx={{ flexGrow: 1, height: '100vh' }}>
 		<Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
 			<Box gridColumn="span 8">
-				<img src={ImageCrazyChallenge} className='image-login' alt='imagen-login' style={{ height: '100vh', width: '100%'}} />
+				<img src={ImageCrazyChallenge} className='image-login' alt='imagen-login' style={{ maxHeight: '100vh', width: '100%', height: '100%'}} />
 			</Box>
 
 			<Box gridColumn="span 4">
@@ -69,20 +72,42 @@ const RegisterForm = ({register, errors, onSubmit, handleSubmit}) => {
 
 				<Grid item xs={12}>
 					<FormControl>
-						<FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel>
+						<FormLabel id="demo-controlled-radio-buttons-group">Género</FormLabel>
 						<RadioGroup
 							aria-labelledby="demo-controlled-radio-buttons-group"
 							name="gender" 
-							{...register("gender")}
 						>
-							<FormControlLabel value="female" control={<Radio />} label="Female" />
-							<FormControlLabel value="male" control={<Radio />} label="Male" />
+							<FormControlLabel value="mujer" control={<Radio />} label="Mujer" {...register("gender")} />
+							<FormControlLabel value="hombre" control={<Radio />} label="Hombre" {...register("gender")}/>
+							<FormControlLabel value="otros" control={<Radio />} label="Otros" {...register("gender")}/>
 						</RadioGroup>
+						<Typography variant="caption" color={'error'}>
+							{errors.gender?.message}
+						</Typography>
 					</FormControl>
 				</Grid>
 
 				<Grid item xs={12}>
-					<DatePicker label="Fecha de Nacimiento" />
+					<Controller
+						name="dateOfBirth"
+						control={control}
+						render={({ field }) => (
+							<div>
+								<DatePicker 
+									label="Fecha de Nacimiento"
+									value={value}
+									onChange={(newValue) => {
+										setValue(newValue);
+										field.onChange(newValue);
+									}}
+								/>
+								<br></br>
+								<Typography variant="caption" color={'error'}>
+									{errors.dateOfBirth?.message}
+								</Typography>
+							</div>
+						)}
+					/>
 				</Grid>
 
 				<Grid item xs={12}>

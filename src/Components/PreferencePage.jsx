@@ -6,20 +6,10 @@ import Stack from '@mui/material/Stack';
 import preferences from '../preferences.js';
 import { Typography } from '@mui/material';
 
-export default function Preferences() {
-    const [selectedButtons, setSelectedButtons] = useState([]);
-
-    const handleSetButtonStyle = (pref) => {
-        if (selectedButtons.includes(pref.name)) {
-        // If the button is already selected, remove it from the array and set the style to "outlined"
-        setSelectedButtons((prev) => prev.filter((item) => item !== pref.name));
-        } else {
-        // If the button is not selected, add it to the array and set the style to "contained"
-        setSelectedButtons((prev) => [...prev, pref.name]);
-        }
-    };
+export default function Preferences({selectedButtons, handleSetButtonStyle}) {
 
     return (
+        
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
             <Typography variant='h3' mb={2}>
                 Preferencias
