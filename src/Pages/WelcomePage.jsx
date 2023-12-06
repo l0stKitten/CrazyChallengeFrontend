@@ -9,6 +9,8 @@ import pro from "../jsonlottie/eres pro.json";
 import meencorazona from "../jsonlottie/me encorazona.json";
 import memata from "../jsonlottie/me mata.json";
 import superhappy from "../jsonlottie/superhappy.json"
+import Button from '@mui/material/Button';
+
 
 function WelcomePage() {
 
@@ -22,10 +24,9 @@ function WelcomePage() {
 	
 	return (
 		<div>
-		<div className="globe"></div>
 		<br />
 		<Confetti width={width} height={height} recycle={true} colors={colors}/>
-		<Box sx={{ height:'100%', width:'100%', justifyContent: 'center', alignContent:'center'} }>
+		<Box sx={{ height:'100%', width:'100%', justifyContent: 'center', alignContent:'center', textAlign:'center'} }>
 			<Grid
 				container
 				direction="row"
@@ -51,16 +52,13 @@ function WelcomePage() {
 			
 			</Grid>
 
-			<Typography variant='h4'>
-				Bienvenido a Crazy Challenge
-				<span  aria-label="tada">
-					🎉
-				</span>
-				,{" "}
-				<Link to="/posts">
-				<span >Iniciar </span>{" "}
-				</Link>
+			<Typography variant='h4' sx={{fontFamily: 'Poppins'}}>
+				Bienvenido a Crazy Challenge 🎉
 			</Typography>
+
+			<Link to="/posts">
+				<Button variant="contained" sx={{mt:4}}>Iniciar</Button>
+			</Link>
 			
 		</Box>
 		</div>

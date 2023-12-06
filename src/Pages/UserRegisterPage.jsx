@@ -1,59 +1,55 @@
-import React, {useState} from 'react';
+import React, { useState, Fragment, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 import RegisterForm from '../Components/RegisterPage';
 import Preferences from '../Components/PreferencePage'
 import WelcomePage from './WelcomePage';
 import RegisterProfile from '../Components/RegisterProfile';
-import RegisterConfirmation from '../Components/RegisterCofirmation';
+import RegisterConfirmation from '../Components/RegisterConfirmation';
 
-import { useForm } from 'react-hook-form';
+import { useForm} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import  schema  from '../js/registersYupSchema'
 
+const steps = ['Datos', 'Gustos', 'Perfil', 'Crea'];
 
-const steps = ['Registra tus datos', 'Elige tus preferencias', 'Edita tu perfil', 'Crea tu cuenta'];
-const schema = yup.object().shape({
-	username: yup.string().required("Se requiere el nombre de usuario"),
-	fullname: yup.string().required("Se requiere el nombre completo"),
-	email: yup.string().required("Se requiere el email"),
-	gender: yup.string().required("Se requiere el género"),
-	password: yup.string().required('Se requiere el password').min(6, 'Debe tener al menos 6 caracteres'),
-    preferences: yup.array().required('Selecciona al menos una categoría'),
-    avatar: yup.string().required().default("https://www.iprcenter.gov/image-repository/blank-profile-picture.png/@@images/image.png"),
-    biography: yup.string().required().default(`Hola, soy ${yup.ref(`username`)}`),
-	confirmPassword: yup
-	  .string()
-	  .oneOf([yup.ref('password'), null], 'Las contraseñas no son iguales')
-	  .required('Se requiere confirmar el password')
-	  .min(6, 'Debe tener al menos 6 caracteres'),
-});
 
 export default function UserRegisterPage() {
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set());
+    const [activeStep, setActiveStep] = useState(0);
+    const [skipped, setSkipped] = useState(new Set());
+    const [value, setGenderValue] = useState(null);
+    const [noPreferences, setNoPreferences] = useState(false);
+    const [preferences, setSelectedButtons] = useState([]);
+    const [selectedGender, setSelectedGender] = useState('');
+    const [uploadedImage, setUploadedImage] = useState(null);
+    const [termsAcepted, setTermsAcepted] = useState(false);
+    const [termsnotAcepted, setTermsNotAcepted] = useState(false);
 
     const {
 		register,
 		handleSubmit,
         watch,
-		formState: { errors },
-		control 
+		formState: { errors, isValid},
+		control,
+        setValue
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
 	
 	const onSubmit = (data) => console.log(data)
 
-    const [selectedButtons, setSelectedButtons] = useState([]);
+    const handleGenderChange = (event) => {
+        setSelectedGender(event.target.value);
+    };
 
-    const handleSetButtonStyle = (pref) => {
-        if (selectedButtons.includes(pref.name)) {
+    const handleSetButtonStyle = (pref) => { 
+        if (preferences.includes(pref.name)) {
         // If the button is already selected, remove it from the array and set the style to "outlined"
         setSelectedButtons((prev) => prev.filter((item) => item !== pref.name));
         } else {
@@ -61,6 +57,15 @@ export default function UserRegisterPage() {
         setSelectedButtons((prev) => [...prev, pref.name]);
         }
 
+    };
+
+    const handleValidateForm = async () => {
+        try {
+          // Trigger form validation
+          await handleSubmit(onSubmit)();
+        } catch (error) {
+          console.error('Form validation failed.', error);
+        }
     };
 
     const isStepOptional = (step) => {
@@ -71,15 +76,39 @@ export default function UserRegisterPage() {
         return skipped.has(step);
     };
 
-    const handleNext = () => {
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-        newSkipped = new Set(newSkipped.values());
-        newSkipped.delete(activeStep);
-        }
+    const handleNext = async () => {
+        try {
+            if (!isValid) {
+                handleValidateForm()
+                return;
+            }
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
+            if (termsAcepted == false && activeStep === steps.length - 1){
+                setTermsNotAcepted(true);
+                return;
+            }
+
+            if (activeStep === steps.length - 1){
+                console.log("REGISTRO EXITOSO")
+            }
+
+            if (activeStep === 1 && preferences.length === 0) {
+                setNoPreferences(true)
+                return;
+            }
+
+            setNoPreferences(false)
+            let newSkipped = skipped;
+            if (isStepSkipped(activeStep)) {
+                newSkipped = new Set(newSkipped.values());
+                newSkipped.delete(activeStep);
+            }
+
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setSkipped(newSkipped);
+        } catch (error) {
+            console.error('Form validation failed.', error);
+        }
     };
 
     const handleBack = () => {
@@ -102,76 +131,112 @@ export default function UserRegisterPage() {
     };
 
     return (
-        <Box sx={{ width: '100%' }}>
-        <Stepper activeStep={activeStep}>
-            {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
-            if (isStepOptional(index)) {
-                labelProps.optional = (
-                <Typography variant="caption">Optional</Typography>
-                );
-            }
-            if (isStepSkipped(index)) {
-                stepProps.completed = false;
-            }
-            return (
-                <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
-                </Step>
-            );
-            })}
-        </Stepper>
+        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <Typography variant="h3" gutterBottom sx={{fontFamily: 'Poppins', p:3}}>
+				Registro de Usuario
+			</Typography>
+        <Grid container spacing={2}>
+        <Grid item xs={12}>
+            <Box sx={{ padding: 1}}>
+                <Stepper
+                    activeStep={activeStep}
+                    sx={{ width: '100%'}}
+                >
+                    
+                    {steps.map((label, index) => {
+                    const stepProps = {};
+                    const labelProps = {};
+                    if (isStepOptional(index)) {
+                        labelProps.optional = (
+                        <Typography variant="caption">Optional</Typography>
+                        );
+                    }
+                    if (isStepSkipped(index)) {
+                        stepProps.completed = false;
+                    }
+                    return (
+                        <Step key={label} {...stepProps}>
+                        <StepLabel {...labelProps}>{label}</StepLabel>
+                        </Step>
+                    );
+                    })}
+                </Stepper>
+            </Box>
+        </Grid>
 
-        {activeStep === steps.length ? (
-            <React.Fragment>
-            <WelcomePage></WelcomePage>
-            </React.Fragment>
-        ) : (
-            <React.Fragment>
+        <Grid item xs={12}>
+            <Box sx={{ padding: 2 }}>
+                {activeStep === steps.length ? (
+                <React.Fragment>
+                    <WelcomePage></WelcomePage>
+                </React.Fragment>
+            ) : (
+                <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <form>
+                        { activeStep + 1 === 1 && <section style={{marginTop:'16px'}}>
+                            <RegisterForm register={register} errors={errors} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} value={value} setValue={setGenderValue} selectedGender={selectedGender} handleGenderChange={handleGenderChange} ></RegisterForm>
+                        </section>}
+
+                        { activeStep + 1 === 2 && <section>
+                            <Preferences register={register} selectedButtons={preferences} handleSetButtonStyle={handleSetButtonStyle} noPreferences={noPreferences}></Preferences>
+                        </section>}
+
+                        { activeStep + 1 === 3 && <section>
+                            <RegisterProfile username={JSON.stringify(watch(), null, 2)} control={control} setValue={setValue} uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} ></RegisterProfile>
+                        </section>}
+
+                        { activeStep + 1 === 4 && <section>
+                            <RegisterConfirmation termsAcepted={termsAcepted} setTermsAcepted={setTermsAcepted} termsnotAcepted={termsnotAcepted} ></RegisterConfirmation>
+                        </section>}
+                    </form>
+                </Box>
+            )}
+            </Box>
+        </Grid>
+        
+        </Grid>
+
+        {activeStep < steps.length  && 
+        <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={4}
+            sx={{
+            width: '100%', // Set width to 100% to stretch across the screen
+            position: 'fixed', // Set position to fixed
+            bottom: 0, // Align to the bottom of the screen
+            p: 2, // Add padding for spacing
+            }}
+        >
             
-                    { activeStep + 1 === 1 && <section style={{marginTop:'16px'}}>
-                        <RegisterForm register={register} errors={errors} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} ></RegisterForm>
-                    </section>}
-
-                    { activeStep + 1 === 2 && <section>
-                        <Preferences selectedButtons={selectedButtons} handleSetButtonStyle={handleSetButtonStyle}></Preferences>
-                    </section>}
-
-                    { activeStep + 1 === 3 && <section>
-                        <RegisterProfile></RegisterProfile>
-                    </section>}
-
-                    { activeStep + 1 === 4 && <section>
-                        <RegisterConfirmation></RegisterConfirmation>
-                    </section>}
-                
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Grid item>
                 <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
+                    variant="contained"
+                    color="inherit"
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
                 >
                 Back
                 </Button>
-                <Box sx={{ flex: '1 1 auto' }} />
-                {isStepOptional(activeStep) && (
-                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+            </Grid>
+
+            {isStepOptional(activeStep) && (<Grid item>
+                <Button color="inherit" onClick={handleSkip} >
                     Skip
                 </Button>
-                )}
-
-                <Button onClick={handleNext}>
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Grid>)}
+                    
+            <Grid item>
+                <Button variant="contained" onClick={handleNext}>
+                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                 </Button>
-            </Box>
-            </React.Fragment>
-        )}
+            </Grid>
 
-            <prev>
-                {JSON.stringify(watch(), null, 2)}
-            </prev>
+        </Grid>
+        }
         </Box>
+
     );
 }
