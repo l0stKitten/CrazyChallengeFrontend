@@ -167,30 +167,30 @@ export default function UserRegisterPage() {
         <Grid item xs={12}>
             <Box sx={{ padding: 2 }}>
                 {activeStep === steps.length ? (
-                <React.Fragment>
-                    <WelcomePage></WelcomePage>
-                </React.Fragment>
-            ) : (
-                <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <form>
-                        { activeStep + 1 === 1 && <section style={{marginTop:'16px'}}>
-                            <RegisterForm register={register} errors={errors} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} value={value} setValue={setGenderValue} selectedGender={selectedGender} handleGenderChange={handleGenderChange} ></RegisterForm>
-                        </section>}
+                    <React.Fragment>
+                        <WelcomePage></WelcomePage>
+                    </React.Fragment>
+                ) : (
+                    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                        <form>
+                            { activeStep + 1 === 1 && <section style={{marginTop:'16px'}}>
+                                <RegisterForm register={register} errors={errors} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} value={value} setValue={setGenderValue} selectedGender={selectedGender} handleGenderChange={handleGenderChange} ></RegisterForm>
+                            </section>}
 
-                        { activeStep + 1 === 2 && <section>
-                            <Preferences register={register} selectedButtons={preferences} handleSetButtonStyle={handleSetButtonStyle} noPreferences={noPreferences}></Preferences>
-                        </section>}
+                            { activeStep + 1 === 2 && <section>
+                                <Preferences register={register} selectedButtons={preferences} handleSetButtonStyle={handleSetButtonStyle} noPreferences={noPreferences}></Preferences>
+                            </section>}
 
-                        { activeStep + 1 === 3 && <section>
-                            <RegisterProfile username={JSON.stringify(watch(), null, 2)} control={control} setValue={setValue} uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} ></RegisterProfile>
-                        </section>}
+                            { activeStep + 1 === 3 && <section>
+                                <RegisterProfile username={JSON.stringify(watch(), null, 2)} control={control} setValue={setValue} uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} ></RegisterProfile>
+                            </section>}
 
-                        { activeStep + 1 === 4 && <section>
-                            <RegisterConfirmation termsAcepted={termsAcepted} setTermsAcepted={setTermsAcepted} termsnotAcepted={termsnotAcepted} ></RegisterConfirmation>
-                        </section>}
-                    </form>
-                </Box>
-            )}
+                            { activeStep + 1 === 4 && <section>
+                                <RegisterConfirmation termsAcepted={termsAcepted} setTermsAcepted={setTermsAcepted} termsnotAcepted={termsnotAcepted} ></RegisterConfirmation>
+                            </section>}
+                        </form>
+                    </Box>
+                )}
             </Box>
         </Grid>
         

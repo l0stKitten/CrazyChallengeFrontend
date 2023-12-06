@@ -32,14 +32,6 @@ const Image = styled('img')`
 	object-fit: cover; /* Maintain aspect ratio while covering */
 `;
 
-const Item = styled(Paper)(({ theme }) => ({
-	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-	...theme.typography.body2,
-	padding: theme.spacing(1),
-	textAlign: 'center',
-	color: theme.palette.text.secondary,
-  }));
-
 const RegisterForm = ({register, errors, control, value, setValue, selectedGender, handleGenderChange}) => {
 
 	const isXs = useMediaQuery('(max-width:912px)')	
