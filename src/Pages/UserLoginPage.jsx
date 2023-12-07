@@ -47,11 +47,12 @@ const LoginForm = () => {
 				navigate('/posts')
 
 			}).catch((err) => {
-				console.log(err.response.data.message);
 				setError(err.response.data.message);
-				setTimeout(() => {
+				const timer = setTimeout(() => {
 					setError([]);
 				}, 5000);
+
+				clearTimeout(timer);
 			});
 	};
 
