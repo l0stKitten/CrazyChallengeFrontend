@@ -5,6 +5,9 @@ import ImageCrazyChallenge from '../img/crazy_challenge.png'
 import GoogleIcon from '@mui/icons-material/Google';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { styled } from '@mui/material/styles';
+import { PORTBACKEND } from '../config.js';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const StyledPaper = styled(Paper)`
 	padding: ${({ theme }) => theme.spacing(0)};
@@ -23,30 +26,35 @@ const Image = styled('img')`
 	object-fit: cover; /* Maintain aspect ratio while covering */
 `;
 
-{/*autoComplete='email'
-								{...register("email")}*/}
-{/*autoComplete='new-password'
-								error={!!errors.password}
-								helperText={errors.password?.message}
-								{...register("password")}
-							<Typography variant="caption" color={'error'}>
-								{errors.email?.message}
-							</Typography>
-							
-							*/}
 
 
 const LoginForm = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-
+	const [error, setError] = useState(['']);
 	const isXs = useMediaQuery('(max-width:912px)')	
+	const navigate = useNavigate();
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log('Email:', email);
-		console.log('Password:', password);
+
+			const apiUrl = PORTBACKEND + '/api/user/login';
+
+			await axios.post(apiUrl, {
+				email: email,
+				password: password
+			}).then((res)=> {
+				navigate('/posts')
+
+			}).catch((err) => {
+				console.log(err.response.data.message);
+				setError(err.response.data.message);
+				setTimeout(() => {
+					setError([]);
+				}, 5000);
+			});
 	};
+
 
 	return (
 		<Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent:'center', margin:'auto'}}>
@@ -72,6 +80,10 @@ const LoginForm = () => {
 					
 				>
 					<Grid item xs={10}>
+					{error.length > 0 && error.map((err, index) => (
+						<Typography color={'error'} key={index}>{err}</Typography>
+					))}
+
 						<Box sx={{mt:2, mb:1}}>
 							<TextField
 								label="Correo electrónico"
@@ -107,6 +119,7 @@ const LoginForm = () => {
 							variant="contained"
 							fullWidth
 							style={{ marginTop: '1rem' }}
+							onClick={handleSubmit}
 						>
 							Iniciar Sesión
 						</Button>

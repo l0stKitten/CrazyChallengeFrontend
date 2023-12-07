@@ -10,6 +10,10 @@ import { useMediaQuery } from '@mui/material';
 
 import { createTheme, styled, useTheme } from '@mui/material/styles';
 
+import { PORTBACKEND } from '../config.js';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 const DrawerFooter = styled('div')(({ theme }) => ({
 	display: 'flex',
 	width: '100%',
@@ -23,9 +27,24 @@ const DrawerFooter = styled('div')(({ theme }) => ({
 	...theme.mixins.toolbar,
 }));
 
+
+
 export default function PostsList() {
 
 	const isXs = useMediaQuery('(max-width:996px)'); // Adjust the width to match your "xs" breakpoint
+	const navigate = useNavigate();
+
+	useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await axios.get(PORTBACKEND + '/api/user/verify');
+            } catch (err) {
+                navigate('/');
+            }
+        };
+
+        fetchData();
+    }, [navigate]);
 
 	return (
 		<Grid container spacing={2} marginRight={2}>
