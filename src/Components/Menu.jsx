@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { createTheme, styled, useTheme } from '@mui/material/styles';
 
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import AppBarCC from './AppBarCC'
 
@@ -91,6 +92,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function Menu(props) {
 	const theme = useTheme();
+	const navigate = useNavigate();
 
 	const [open, setOpen] = React.useState(false);
 	const [cannotOpen, setCannotOpen] = React.useState(false);
@@ -102,6 +104,10 @@ export default function Menu(props) {
 			].join(','),
 		}
 	})
+
+	const handleNavigate = (route) => {
+		navigate(route)
+	}
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -191,13 +197,14 @@ export default function Menu(props) {
 				{menuOptions.map((option, index) => (
 					<Tooltip key={option.name} title={option.name} placement="right">
 					<ListItem  disablePadding sx={{ display: 'block' }}>
-					<NavLink to={option.navigate}>
+				
 						<ListItemButton
 							sx={{
 							minHeight: 48,
 							justifyContent: open ? 'initial' : 'center',
 							px: 2.5,
 							}}
+							onClick={() => handleNavigate(option.navigate)}
 						>
 							<ListItemIcon
 							sx={{
@@ -210,7 +217,7 @@ export default function Menu(props) {
 							</ListItemIcon>
 							<ListItemText primary={option.name} sx={{ opacity: open ? 1 : 0 }} />
 						</ListItemButton>
-					</NavLink>
+		
 					</ListItem>
 					</Tooltip>
 				))}
@@ -218,13 +225,14 @@ export default function Menu(props) {
 				{moreMenuOptions.map((option, index) => (
 					<Tooltip key={option.name} title={option.name} placement="right" >
 					<ListItem  disablePadding sx={{ display:  { xs: 'flex', md: 'none' }, }}>
-					<NavLink to={option.navigate}>
+	
 						<ListItemButton
 							sx={{
 							minHeight: 48,
 							justifyContent: open ? 'initial' : 'center',
 							px: 2.5,
 							}}
+							onClick={() => handleNavigate(option.navigate)}
 						>
 							<ListItemIcon
 							sx={{
@@ -237,7 +245,7 @@ export default function Menu(props) {
 							</ListItemIcon>
 							<ListItemText primary={option.name} sx={{ opacity: open ? 1 : 0 }} />
 						</ListItemButton>
-					</NavLink>
+			
 					</ListItem>
 					</Tooltip>
 				))}

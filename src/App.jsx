@@ -12,6 +12,7 @@ import LoginForm from "./Pages/UserLoginPage"
 import RegisterForm from "./Pages/UserRegisterPage"
 import WelcomePage from "./Pages/WelcomePage";
 import RanksPage from "./Pages/RanksPage";
+import NotFoundPage from "./Pages/404NotFound";
 
 export default function App() {
 	return (
@@ -26,7 +27,7 @@ export default function App() {
 			<Route path="/profile" element={<ProfileEditPage/>} />
 			<Route path="/welcome" element={<WelcomePage/>} />
 			<Route path="/ranks" element={<RanksPage/>} />
-			{/*<Route path="*" element={<NotFoundPage />} />*/}
+			<Route path="*" element={<NotFoundPage />} />
 		</Routes>
 		</Router>
 	);

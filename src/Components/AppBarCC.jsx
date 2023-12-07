@@ -19,6 +19,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -108,6 +109,12 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    const navigate = useNavigate();
+
+    const handleNavigate = () => {
+		navigate('/posts')
+	}
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -237,7 +244,10 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
             <Toolbar>
             {!openVar && <Box 
                 sx={{display: 'flex',
-                mr: 4}}>
+                mr: 4}}
+                onClick={handleNavigate}
+            >
+                    
             <Typography sx={{ display: { xs: 'flex', md: 'flex' }, mr: 1, fontSize:25 }}>
                 😜
             </Typography>
