@@ -164,7 +164,7 @@ const RegisterForm = ({register, errors, control, value, setValue, selectedGende
 						</Box>
 					</Grid>
 
-					<Grid item xs={6}>
+					<Grid item xs={12}>
 						<Box sx={{mt:2, mb:1,}}>
 							<FormControl>
 								<FormLabel id="demo-controlled-radio-buttons-group">Género</FormLabel>
@@ -192,7 +192,7 @@ const RegisterForm = ({register, errors, control, value, setValue, selectedGende
 						</Box>
 					</Grid>
 
-					<Grid item xs={6}>
+					<Grid item xs={12}>
 						<Box sx={{mt:2, mb:1}}>
 							<Link href="#" variant="body2" style={{ marginTop: '1rem' }}>
 								¿Ya tienes una cuenta? Inicia sesión

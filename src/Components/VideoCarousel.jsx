@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { IconButton, Slide, Grid } from '@mui/material';
+import { Box, IconButton, Slide, Grid } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ReactPlayer from 'react-player';
+import ReactionChallenge from '../Components/ReactionChallenge';
 
 import { styled } from '@mui/material/styles';
 
@@ -50,7 +51,7 @@ const VideoCarousel = ({ videos  }) => {
 					<ArrowBackIosNewIcon />
 				</IconButton>
 			</Grid>
-			<Grid item xs={10} sx={{ display: 'flex', justifyContent: 'center' }} p={0}>
+			<Grid item xs={10} sx={{ display: 'flex', justifyContent: 'center', alignItems:'center'}} p={0}>
 				<Slide direction="left" in={true} mountOnEnter unmountOnExit>
 					<StyledPlayerWrapper>
 						<ReactPlayer
@@ -62,6 +63,10 @@ const VideoCarousel = ({ videos  }) => {
 						/>
 					</StyledPlayerWrapper>
 				</Slide>
+				<Box sx={{ml:1}}>
+					<ReactionChallenge></ReactionChallenge>
+				</Box>
+				
 			</Grid>
 			<Grid item xs={1} sx={{ display: {xs:'none', md:'flex'}, justifyContent: 'flex-end', p:0 }}>
 				<IconButton onClick={handleNext} aria-label="next">

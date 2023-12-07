@@ -61,16 +61,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
-const DrawerFooter = styled('div')(({ theme }) => ({
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-	padding: 2,
-	bottom: 0, 
-	textAlign: 'center',
-	// necessary for content to be below app bar
-	...theme.mixins.toolbar,
-}));
+
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
 	({ theme, open }) => ({
@@ -286,14 +277,7 @@ export default function Menu(props) {
 
 			<Box sx={{mt:2}}>
 				{DynamicComponent && <DynamicComponent />}
-			</Box>
-			
-
-
-			<DrawerFooter>
-				<Typography variant="body2"> © Crazy Challenge </Typography>
-			</DrawerFooter>
-				
+			</Box>				
 
 		</Box>
 		</Box>

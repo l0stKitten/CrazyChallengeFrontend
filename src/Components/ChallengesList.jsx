@@ -1,10 +1,25 @@
 import React from 'react'
-
+import Typography from '@mui/material/Typography';
 import ChallengeCard from './Challenge/ChallengeCard';
 import ChatsandContact from './ChatsandContact';
 
 import Grid from '@mui/material/Grid';
 import { useMediaQuery } from '@mui/material';
+
+import { createTheme, styled, useTheme } from '@mui/material/styles';
+
+const DrawerFooter = styled('div')(({ theme }) => ({
+	display: 'flex',
+	width: '100%',
+	alignItems: 'center',
+	alignContent: 'center',
+	justifyContent: 'center',
+	padding: 2,
+	bottom: 0, 
+	textAlign: 'center',
+	// necessary for content to be below app bar
+	...theme.mixins.toolbar,
+}));
 
 const challenges = [
   {
@@ -52,6 +67,10 @@ export default function ChallengesList() {
 				<ChatsandContact></ChatsandContact>
 				
 			</Grid>}
+
+			<DrawerFooter>
+				<Typography variant="body2"> © Crazy Challenge </Typography>
+			</DrawerFooter>
 		</Grid>
 	);
 }

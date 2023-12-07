@@ -192,50 +192,51 @@ export default function UserRegisterPage() {
                     </Box>
                 )}
             </Box>
+
+            {activeStep < steps.length  && 
+            <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={4}
+                sx={{
+                width: '100%', // Set width to 100% to stretch across the screen
+                bottom: 0, // Align to the bottom of the screen
+                p: 2, // Add padding for spacing
+                }}
+            >
+                
+                <Grid item>
+                    <Button
+                        variant="contained"
+                        color="inherit"
+                        disabled={activeStep === 0}
+                        onClick={handleBack}
+                    >
+                    Back
+                    </Button>
+                </Grid>
+
+                {isStepOptional(activeStep) && (<Grid item>
+                    <Button color="inherit" onClick={handleSkip} >
+                        Skip
+                    </Button>
+                </Grid>)}
+                        
+                <Grid item>
+                    <Button variant="contained" onClick={handleNext}>
+                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    </Button>
+                </Grid>
+
+            </Grid>
+            }
         </Grid>
         
         </Grid>
 
-        {activeStep < steps.length  && 
-        <Grid
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            spacing={4}
-            sx={{
-            width: '100%', // Set width to 100% to stretch across the screen
-            position: 'fixed', // Set position to fixed
-            bottom: 0, // Align to the bottom of the screen
-            p: 2, // Add padding for spacing
-            }}
-        >
-            
-            <Grid item>
-                <Button
-                    variant="contained"
-                    color="inherit"
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                >
-                Back
-                </Button>
-            </Grid>
-
-            {isStepOptional(activeStep) && (<Grid item>
-                <Button color="inherit" onClick={handleSkip} >
-                    Skip
-                </Button>
-            </Grid>)}
-                    
-            <Grid item>
-                <Button variant="contained" onClick={handleNext}>
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
-            </Grid>
-
-        </Grid>
-        }
+        
         </Box>
 
     );

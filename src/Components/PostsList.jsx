@@ -3,9 +3,25 @@ import React, { useEffect } from 'react'
 import Post from './Post'
 import ChatsandContact from './ChatsandContact';
 import CreatePost from './CreatePost';
+import Typography from '@mui/material/Typography';
 
 import Grid from '@mui/material/Grid';
 import { useMediaQuery } from '@mui/material';
+
+import { createTheme, styled, useTheme } from '@mui/material/styles';
+
+const DrawerFooter = styled('div')(({ theme }) => ({
+	display: 'flex',
+	width: '100%',
+	alignItems: 'center',
+	alignContent: 'center',
+	justifyContent: 'center',
+	padding: 2,
+	bottom: 0, 
+	textAlign: 'center',
+	// necessary for content to be below app bar
+	...theme.mixins.toolbar,
+}));
 
 export default function PostsList() {
 
@@ -32,6 +48,12 @@ export default function PostsList() {
 				<ChatsandContact></ChatsandContact>
 				
 			</Grid>}
+			
+				<DrawerFooter>
+					<Typography variant="body2"> © Crazy Challenge </Typography>
+				</DrawerFooter>
+			
+			
 		</Grid>
 	);
 }
