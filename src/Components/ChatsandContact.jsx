@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 
 import ContactList from './CardSM'
+import ChatList from './ChatList'
 import ChatPopup from './ChatPopup'
 
 const contacts = [
@@ -25,9 +26,20 @@ const contacts = [
 {"id":19,"name":"Mariana Salthouse"},
 {"id":20,"name":"Humphrey Zolini"}]
 
+const initialChatsArray = [
+    {"id":1,"name":"Grange Slight"},
+    {"id":2,"name":"Cleveland Staniland"},
+    {"id":3,"name":"Libbi Felderer"},
+    {"id":4,"name":"Letizia Synke"},
+    {"id":5,"name":"Rora Rickersey"},
+    {"id":6,"name":"Anjela Giacomoni"},
+    {"id":7,"name":"Jeramie De Cristofalo"},
+    {"id":8,"name":"Charin Mugglestone"},
+    {"id":9,"name":"Ludovico Howatt"},]
+
 
 export default function ChatsandContact() {
-
+    const [chats, setChats] = React.useState([...initialChatsArray]);
 	const [openChat, setOpenChat] = React.useState(false);
     const [selectedChat, setSelectedChat] = React.useState(null);
     const [minimizedChats, setMinimizedChats] = React.useState([]);
@@ -48,7 +60,7 @@ export default function ChatsandContact() {
 
 	return (
         <Fragment>
-            <ContactList title={"Chats"} handleChatOpen={handleChatOpen} contacts={contacts} mtbool={false}></ContactList>
+            <ChatList title={"Chats"} handleChatOpen={handleChatOpen} chatlist={chats} setChats={setChats} seguidores={contacts} mtbool={false}></ChatList>
             <ContactList title={"Seguidores"} contacts={contacts} mtbool={true}></ContactList>
             <ChatPopup
                 open={openChat}

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 
 import Post from './Post'
 import ChatsandContact from './ChatsandContact';
+import CreatePost from './CreatePost';
 
 import Grid from '@mui/material/Grid';
 import { useMediaQuery } from '@mui/material';
@@ -18,6 +19,7 @@ export default function PostsList() {
 				alignItems="center"
 				gap={4}
 			>
+				<CreatePost></CreatePost>
 				{Array.from(Array(6)).map((_, index) => (
 					<Post key={index}>xs=8</Post>
 				))}

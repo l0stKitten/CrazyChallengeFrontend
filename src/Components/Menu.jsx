@@ -59,6 +59,18 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 	...theme.mixins.toolbar,
 }));
 
+
+const DrawerFooter = styled('div')(({ theme }) => ({
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
+	padding: 2,
+	bottom: 0, 
+	textAlign: 'center',
+	// necessary for content to be below app bar
+	...theme.mixins.toolbar,
+}));
+
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
 	({ theme, open }) => ({
 			width: drawerWidth,
@@ -116,7 +128,7 @@ export default function Menu(props) {
 	const menuOptions = [
 		{"name": "Inicio", "navigate": "/posts"},
 		{"name": "Perfil", "navigate": "/profile"},
-		{"name": "Rangos", "navigate": "/"}
+		{"name": "Rangos", "navigate": "/ranks"}
 	]
 
 	const moreMenuOptions = [
@@ -264,7 +276,17 @@ export default function Menu(props) {
 		<Box component="main" sx={{ flexGrow: 1, p: 3, mt:2, mr:1}}>
 			<DrawerHeader />
 
-			{DynamicComponent && <DynamicComponent />}
+			<Box sx={{mt:2}}>
+				{DynamicComponent && <DynamicComponent />}
+			</Box>
+			
+
+
+			<DrawerFooter>
+				<Typography variant="body2"> © Crazy Challenge </Typography>
+			</DrawerFooter>
+				
+
 		</Box>
 		</Box>
 	);

@@ -100,7 +100,6 @@ const EditProfile = () => {
     return (
 
         <Box
-            bgcolor="rgb(244, 245, 299)"
             borderRadius={8}
             p={3} // Ajusta el espacio interior del Box
             mt={2} // Ajusta el espacio superior del Box
@@ -136,11 +135,8 @@ const EditProfile = () => {
                                     variant="contained"
                                     onClick={handleUploadPhoto}
                                     style={{
-                                        color: 'white',
-                                        backgroundColor: 'black',
                                         width: '160px',
                                         height: '50px',
-                                        fontSize: '11px',
                                         marginBottom: '10px',
                                         //marginBottom: { xs: '10px', md: '0' }, // Espaciado inferior en dispositivos pequeños
                                         marginRight: '25px',
@@ -152,12 +148,10 @@ const EditProfile = () => {
                                 <Button
                                     variant="contained"
                                     onClick={handleDeletePhoto}
+                                    color='secondary'
                                     style={{
-                                        color: 'black',
-                                        backgroundColor: 'white',
                                         width: '160px',
                                         height: '50px',
-                                        fontSize: '11px',
                                         marginBottom: '15px',
                                     }}
                                 >
@@ -301,14 +295,11 @@ const EditProfile = () => {
                 <Button
                     variant="contained"
                     style={{
-                        color: 'black',
-                        backgroundColor: 'white',
-                        border: '1px solid rgb(56, 77, 108)',
                         width: '160px',
                         height: '50px',
-                        fontSize: '13px',
                         marginRight: '25px',
                     }}
+                    color='secondary'
                 >
                     Cancelar
                 </Button>
@@ -316,8 +307,6 @@ const EditProfile = () => {
                     variant="contained"
                     onClick={handleSaveChanges}
                     style={{
-                        color: 'white',
-                        backgroundColor: 'rgb(56, 77, 108)',
                         width: '160px',
                         height: '50px',
                         fontSize: '13px',

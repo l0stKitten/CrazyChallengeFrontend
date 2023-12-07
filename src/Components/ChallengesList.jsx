@@ -8,6 +8,7 @@ import { useMediaQuery } from '@mui/material';
 
 const challenges = [
   {
+	id: 1,
     nombre_reto : "Matar a Jiren",
     creador_reto: "bradlymachado",
     descripcion: "Derrotar a Jiren en una batalla usando todos los recursos que tengas.",
@@ -16,6 +17,7 @@ const challenges = [
     participantes: 25
   },
   {
+	id: 2,
     nombre_reto : "Matar a Jiren 2",
     creador_reto: "bradlymachado",
     descripcion: "Derrotar a Jiren en una batalla usando todos los recursos que tengas. Lo mismo pero más barato",
