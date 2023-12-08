@@ -1,12 +1,16 @@
 import { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
+import { loginRequest, registerRequest, verifyTokenRequest } from "../api/auth";
+import { auth } from "../firebase/firebase.config";
+import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
-const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-export const useAuth = ({children}) => {
+export const useAuth = () => {
     const context = useContext(AuthContext);
+    if(!context){
+      console.log("Error al crear el contexto.");
+    }
     return context;
 };
 
@@ -14,8 +18,37 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState([]);
 
-  const signup = async (user) => {
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
+
+  const login = async (user) => {
+    try {
+      console.log('usuario');
+      console.log(user);
+      const res = await loginRequest(user);
+      console.log(res);
+      setUser(res.data);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.log(error);
+      setErrors(error.response.data.message);
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 5000);
+
+      clearTimeout(timer);
+    }
+  };
+
+  const register = async (user) => {
     try {
       const res = await registerRequest(user);
       if (res.status === 200) {
@@ -25,17 +58,6 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.log(error.response.data);
       setErrors(error.response.data.message);
-    }
-  };
-
-  const signin = async (user) => {
-    try {
-      const res = await loginRequest(user);
-      setUser(res.data);
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.log(error);
-      // setErrors(error.response.data.message);
     }
   };
 
@@ -73,12 +95,12 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        signup,
-        signin,
+        register,
+        login,
         logout,
         isAuthenticated,
         errors,
-        loading,
+        loading
       }}
     >
       {children}

@@ -13,22 +13,25 @@ import RegisterForm from "./Pages/UserRegisterPage"
 import WelcomePage from "./Pages/WelcomePage";
 import RanksPage from "./Pages/RanksPage";
 import NotFoundPage from "./Pages/404NotFound";
+import { AuthProvider } from "./context/authContext";
 
 export default function App() {
 	return (
-		<Router>
+		<AuthProvider>
+			<Router>
 
-		<Routes>
-			<Route path="/" element={<LoginForm/>} />
-			<Route path="/register" element={<RegisterForm/>} />
-			<Route path="/posts" element={<PostsPage/>} />
-			<Route path="/challenges" element={<ChallengePage/>} />
-			<Route path="/shorts" element={<ChallengeShortPage/>} />
-			<Route path="/profile" element={<ProfileEditPage/>} />
-			<Route path="/welcome" element={<WelcomePage/>} />
-			<Route path="/ranks" element={<RanksPage/>} />
-			<Route path="*" element={<NotFoundPage />} />
-		</Routes>
-		</Router>
+			<Routes>
+				<Route path="/" element={<LoginForm/>} />
+				<Route path="/register" element={<RegisterForm/>} />
+				<Route path="/posts" element={<PostsPage/>} />
+				<Route path="/challenges" element={<ChallengePage/>} />
+				<Route path="/shorts" element={<ChallengeShortPage/>} />
+				<Route path="/profile" element={<ProfileEditPage/>} />
+				<Route path="/welcome" element={<WelcomePage/>} />
+				<Route path="/ranks" element={<RanksPage/>} />
+				<Route path="*" element={<NotFoundPage />} />
+			</Routes>
+			</Router>
+		</AuthProvider>
 	);
 }
