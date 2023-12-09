@@ -20,12 +20,13 @@ import  schema  from '../js/registersYupSchema'
 import { useAuth } from "../context/authContext";
 import { useEffect } from "react";	
 import { useNavigate } from 'react-router-dom';
+import { useUserContext  } from '../context/temporalAuthContext';
 
 const steps = ['Datos', 'Gustos', 'Perfil', 'Crea'];
 
 
 export default function UserRegisterPage() {
-    const { signup, errors: registerErrors, isAuthenticated } = useAuth();
+    const { signup, isAuthenticated } = useAuth();
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
     const [value, setGenderValue] = useState(null);
@@ -36,6 +37,7 @@ export default function UserRegisterPage() {
     const [termsAcepted, setTermsAcepted] = useState(false);
     const [termsnotAcepted, setTermsNotAcepted] = useState(false);
     const navigate = useNavigate();
+    const { setSharedVariable } = useUserContext();
 
     const {
 		register,
@@ -105,6 +107,7 @@ export default function UserRegisterPage() {
                 formData['preferences'] = dataPreferences;
                 console.log(formData);
                 await onSubmit(formData);
+                setSharedVariable(null);
                 return;
             }
 

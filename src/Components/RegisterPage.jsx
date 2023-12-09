@@ -14,6 +14,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import '../Components/Challenge/styles.css';
 import ImageCrazyChallenge from '../img/crazy_challenge.png'
+import { useUserContext  } from '../context/temporalAuthContext';
 
 const StyledPaper = styled(Paper)`
 	padding: ${({ theme }) => theme.spacing(0)};
@@ -34,7 +35,22 @@ const Image = styled('img')`
 
 const RegisterForm = ({register, errors, control, value, setValue, selectedGender, handleGenderChange}) => {
 
-	const isXs = useMediaQuery('(max-width:912px)')	
+	const { sharedVariable } = useUserContext();
+
+	const isXs = useMediaQuery('(max-width:912px)');
+
+	const defaultValues = {
+		fullname: '',
+		email: '',
+		password: ''
+	  };
+
+
+	  if (sharedVariable != null || sharedVariable != undefined) {
+		defaultValues.fullname = sharedVariable.user.displayName;
+		defaultValues.email = sharedVariable.user.email;
+		defaultValues.password = '123456';
+	  }
 
 	return (
 		<Grid container spacing={2} >
@@ -80,7 +96,7 @@ const RegisterForm = ({register, errors, control, value, setValue, selectedGende
 								fullWidth
 								required
 								autoComplete='name'
-								{...register("fullname")}
+								{...register("fullname", { value: defaultValues.fullname })}
 							/>
 							<Typography variant="caption" color={'error'}>
 								{errors.fullname?.message}
@@ -97,7 +113,7 @@ const RegisterForm = ({register, errors, control, value, setValue, selectedGende
 								fullWidth
 								required
 								autoComplete='email'
-								{...register("email")}
+								{...register("email", { value: defaultValues.email })}
 							/>
 							<Typography variant="caption" color={'error'}>
 								{errors.email?.message}
@@ -138,12 +154,13 @@ const RegisterForm = ({register, errors, control, value, setValue, selectedGende
 								label="Contraseña"
 								type="password"
 								variant="outlined"
+								disabled={!!sharedVariable}
 								fullWidth
 								required
 								autoComplete='new-password'
 								error={!!errors.password}
 								helperText={errors.password?.message}
-								{...register("password")}
+								{...register("password", { value: defaultValues.password })}
 							/>
 						</Box>
 					</Grid>
@@ -154,12 +171,13 @@ const RegisterForm = ({register, errors, control, value, setValue, selectedGende
 								label="Repetir Contraseña"
 								type="password"
 								variant="outlined"
+								disabled={!!sharedVariable}
 								fullWidth
 								required
 								autoComplete='new-password'
 								error={!!errors.confirmPassword}
 								helperText={errors.confirmPassword?.message}
-								{...register("confirmPassword")}
+								{...register("confirmPassword", { value: defaultValues.password })}
 							/>
 						</Box>
 					</Grid>

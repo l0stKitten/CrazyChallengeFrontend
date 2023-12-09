@@ -14,28 +14,31 @@ import WelcomePage from "./Pages/WelcomePage";
 import RanksPage from "./Pages/RanksPage";
 import NotFoundPage from "./Pages/404NotFound";
 import { AuthProvider } from "./context/authContext";
+import { TemporalUserProvider } from './context/temporalAuthContext';
 
 import { ProtectedRoute } from "./routes";
 
 export default function App() {
 	return (
 		<AuthProvider>
-			<Router>
+			<TemporalUserProvider>
+				<Router>
 
-			<Routes>
-				<Route path="/" element={<LoginForm/>} />
-				<Route path="/register" element={<RegisterForm/>} />
-				<Route element={<ProtectedRoute />}>
-					<Route path="/posts" element={<PostsPage/>} />
-					<Route path="/challenges" element={<ChallengePage/>} />
-					<Route path="/shorts" element={<ChallengeShortPage/>} />
-					<Route path="/profile" element={<ProfileEditPage/>} />
-					<Route path="/welcome" element={<WelcomePage/>} />
-					<Route path="/ranks" element={<RanksPage/>} />
-					<Route path="*" element={<NotFoundPage />} />
-				</Route>
-			</Routes>
-			</Router>
+				<Routes>
+					<Route path="/" element={<LoginForm/>} />
+					<Route path="/register" element={<RegisterForm/>} />
+					<Route element={<ProtectedRoute />}>
+						<Route path="/posts" element={<PostsPage/>} />
+						<Route path="/challenges" element={<ChallengePage/>} />
+						<Route path="/shorts" element={<ChallengeShortPage/>} />
+						<Route path="/profile" element={<ProfileEditPage/>} />
+						<Route path="/welcome" element={<WelcomePage/>} />
+						<Route path="/ranks" element={<RanksPage/>} />
+						<Route path="*" element={<NotFoundPage />} />
+					</Route>
+				</Routes>
+				</Router>
+			</TemporalUserProvider>
 		</AuthProvider>
 	);
 }

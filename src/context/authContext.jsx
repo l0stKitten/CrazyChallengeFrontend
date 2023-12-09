@@ -2,9 +2,8 @@ import { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
 import { loginRequest, registerRequest, verifyTokenRequest } from "../api/auth";
 import { auth } from "../firebase/firebase.config";
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Cookies from "js-cookie";
-import { Password } from "@mui/icons-material";
 
 const AuthContext = createContext();
 
@@ -91,7 +90,9 @@ export const AuthProvider = ({ children }) => {
   const loginWithGoogle = async () => {
     const resGoogle = new GoogleAuthProvider();
     const response = await signInWithPopup(auth, resGoogle);
-    console.log(response);
+    console.log(response.user.displayName);
+    console.log(response.user.email);
+    return response;
   }
 
   return (

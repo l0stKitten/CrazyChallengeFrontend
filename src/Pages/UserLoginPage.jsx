@@ -7,8 +7,9 @@
 	import { styled } from '@mui/material/styles';
 	import { useNavigate } from 'react-router-dom';
 	import { useAuth } from "../context/authContext";
-	import { useEffect } from "react";	
-	import { useForm } from "react-hook-form";
+	import { useEffect } from "react";
+	import { useUserContext  } from '../context/temporalAuthContext';
+
 
 	const StyledPaper = styled(Paper)`
 		padding: ${({ theme }) => theme.spacing(0)};
@@ -37,6 +38,7 @@
 		const isXs = useMediaQuery('(max-width:912px)')	
 		const navigate = useNavigate();
 		const {login, errors: loginErrors, isAuthenticated, loginWithGoogle } = useAuth();
+		const { setSharedVariable } = useUserContext();
 
 		useEffect(() => {
 			if (isAuthenticated) {
@@ -60,7 +62,17 @@
 
 		const handleGoogle= async (e) => {
 			e.preventDefault();
-			loginWithGoogle();
+			const resGoogle = await loginWithGoogle();
+			try {
+				const data = {
+					email: resGoogle.user.email,
+					password: '123456'
+				};
+				login(data);
+			}catch (error) {
+				setSharedVariable(resGoogle);
+				navigate("/register");
+			}
 		}
 
 
