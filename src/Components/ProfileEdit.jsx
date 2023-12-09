@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Grid,
     Box,
@@ -20,6 +20,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
+import { useAuth } from "../context/authContext";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -63,9 +64,10 @@ const PasswordInput = ({ label, value, onChange }) => {
 
 
 const EditProfile = () => {
-    const [fullName, setFullName] = useState('Chandan S');
-    const [userName, setUserName] = useState('Chan');
-    const [email, setEmail] = useState('chan@gmail.com');
+    const {user, getUserById} = useAuth();
+    const [fullName, setFullName] = useState('');
+    const [userName, setUserName] = useState('');
+    const [email, setEmail] = useState('');
     const [rank, setRank] = useState('Novato');
     const [address, setAddress] = useState('Arequipa, Peru');
     const [userPhoto, setUserPhoto] = useState('https://i.pinimg.com/originals/40/7b/62/407b62161d8ba02b3626a7524fa835a7.jpg');
@@ -73,6 +75,29 @@ const EditProfile = () => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const usuario = await getUserById(user.id);
+
+                const preferencias = usuario.user.preferences.map(item => item.category);
+
+                // Actualizar los estados después de obtener la información del usuario
+                setFullName(usuario.user.fullname);
+                setUserName(usuario.user.username);
+                setEmail(usuario.user.email);
+                setUserPreferences(preferencias);
+                
+                // ...
+            } catch (error) {
+                // Manejo de errores si es necesario
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchData();
+    }, [getUserById, user.id]);
 
     const handleUploadPhoto = () => {
         // lógica subir nueva foto
@@ -122,7 +147,7 @@ const EditProfile = () => {
                     <Grid item xs={12} md={5}>
                         <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="center">
                             <Typography variant="h6" mt={2} sx={{ fontWeight: 'bold' }}>
-                                {fullName}
+                                {fullName}  
                             </Typography>
                             <Typography variant="subtitle1">Rango {rank}</Typography>
                             <Typography variant="subtitle1">{address}</Typography>
@@ -175,7 +200,7 @@ const EditProfile = () => {
                                 style: { fontWeight: 'bold', marginBottom: '8px', position: 'absolute' },
                                 shrink: true,
                             }}
-                            placeholder="Ejemplo: Alaa"
+                            placeholder={"Tu nombre es: " + fullName}
                             sx={{ backgroundColor: 'white' }} // Agrega fondo blanco al TextField
                         //onChange={(e) => setFullName(e.target.value)}
                         />
@@ -188,7 +213,7 @@ const EditProfile = () => {
                                 style: { fontWeight: 'bold', marginBottom: '8px', position: 'absolute' },
                                 shrink: true,
                             }}
-                            placeholder="Ejemplo: usuario123"
+                            placeholder={"Tu nombre de usuario es: " + userName }
                             sx={{ backgroundColor: 'white' }} // Agrega fondo blanco al TextField
                         //onChange={(e) => setUserName(e.target.value)}
                         />
@@ -201,7 +226,7 @@ const EditProfile = () => {
                                 style: { fontWeight: 'bold', marginBottom: '8px', position: 'absolute' },
                                 shrink: true,
                             }}
-                            placeholder="Ejemplo: correo@example.com"
+                            placeholder={"Tu correo es: " + email}
                             sx={{ backgroundColor: 'white' }} // Agrega fondo blanco al TextField
                         //onChange={(e) => setEmail(e.target.value)}
                         />

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
-import { loginRequest, registerRequest, verifyTokenRequest } from "../api/auth";
+import { loginRequest, registerRequest, verifyTokenRequest, getUserByIdRequest } from "../api/auth";
 import { auth } from "../firebase/firebase.config";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Cookies from "js-cookie";
@@ -64,6 +64,18 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
   };
 
+  const getUserById = async (userId) => {
+    try {
+      const res = await getUserByIdRequest(userId);
+      if (res.status === 200) {
+        return res.data;
+      } else {
+        throw new Error("Error: " + res.status);
+      }
+    } catch (error) {
+    }
+  };
+
   useEffect(() => {
     const checkLogin = async () => {
       const cookies = Cookies.get();
@@ -105,7 +117,8 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         errors,
         loading,
-        loginWithGoogle
+        loginWithGoogle,
+        getUserById
       }}
     >
       {children}

@@ -25,7 +25,7 @@ export const updateRequest = (id, user) => {
 }
 
 export const getUserByIdRequest = (id) => {
-    return axios.post('/api/user/' + id)
+    return axios.get('/api/user/' + id)
 }
 
 export const updatePasswordRequest = (id, password) => {
