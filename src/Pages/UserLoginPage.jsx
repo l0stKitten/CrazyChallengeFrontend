@@ -36,13 +36,17 @@
 		const [error, setError] = useState(['']);
 		const isXs = useMediaQuery('(max-width:912px)')	
 		const navigate = useNavigate();
-		const {login, errors: loginErrors, isAuthenticated } = useAuth();
+		const {login, errors: loginErrors, isAuthenticated, loginWithGoogle } = useAuth();
 
 		useEffect(() => {
 			if (isAuthenticated) {
 			navigate("/posts");
 			}
 		}, [isAuthenticated]);
+
+		useEffect(() => {
+			setError(loginErrors);
+		  }, [loginErrors]);
 
 		const handleSubmit = async (e) => {
 			e.preventDefault();
@@ -53,6 +57,11 @@
 
 			login(data);
 		};
+
+		const handleGoogle= async (e) => {
+			e.preventDefault();
+			loginWithGoogle();
+		}
 
 
 		return (
@@ -138,6 +147,7 @@
 								fullWidth
 								style={{ marginTop: '1rem' }}
 								startIcon={<GoogleIcon/>}
+								onClick={(e)=>handleGoogle(e)}
 							> 
 								Iniciar Sesión con Google
 							</Button>

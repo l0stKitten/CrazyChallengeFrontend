@@ -5,33 +5,33 @@ export const loginRequest = (user) => {
 }
 
 export const registerRequest = (user) => {
-    axios.post('/api/user/register', user)
+    return axios.post('/api/user/register', user)
 }
 
 export const logoutRequest = () => {
-    axios.post('/api/user/logout')
+    return axios.post('/api/user/logout')
 }
 
 export const findByNameRequest = (name) => {
-    axios.get('/api/user/finByName/' + name )
+    return axios.get('/api/user/finByName/' + name )
 }
 
 export const deleteRequest = (id) => {
-    axios.delete('/api/user/' + id)
+    return axios.delete('/api/user/' + id)
 }
 
 export const updateRequest = (id, user) => {
-    axios.put('/api/user/' + id, user)
+    return axios.put('/api/user/' + id, user)
 }
 
 export const getUserByIdRequest = (id) => {
-    axios.post('/api/user/' + id)
+    return axios.post('/api/user/' + id)
 }
 
 export const updatePasswordRequest = (id, password) => {
-    axios.patch('/api/user/updatePassword/' + id, password)
+    return axios.patch('/api/user/updatePassword/' + id, password)
 }
 
 export const verifyTokenRequest = async () => {
-    axios.get('/api/user/verify')
+    return axios.get('/api/user/verify')
 }

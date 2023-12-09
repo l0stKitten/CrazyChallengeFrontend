@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
 import { loginRequest, registerRequest, verifyTokenRequest } from "../api/auth";
 import { auth } from "../firebase/firebase.config";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import Cookies from "js-cookie";
+import { Password } from "@mui/icons-material";
 
 const AuthContext = createContext();
 
@@ -31,14 +33,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (user) => {
     try {
-      console.log('usuario');
-      console.log(user);
       const res = await loginRequest(user);
-      console.log(res);
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
-      console.log(error);
       setErrors(error.response.data.message);
       const timer = setTimeout(() => {
         setErrors([]);
@@ -48,15 +46,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (user) => {
+  const signup = async (user) => {
     try {
       const res = await registerRequest(user);
       if (res.status === 200) {
-        setUser(res.data);
+        console.log(res);
+        setUser(res);
         setIsAuthenticated(true);
       }
     } catch (error) {
-      console.log(error.response.data);
       setErrors(error.response.data.message);
     }
   };
@@ -78,7 +76,6 @@ export const AuthProvider = ({ children }) => {
 
       try {
         const res = await verifyTokenRequest(cookies.token);
-        console.log(res);
         if (!res.data) return setIsAuthenticated(false);
         setIsAuthenticated(true);
         setUser(res.data);
@@ -91,16 +88,23 @@ export const AuthProvider = ({ children }) => {
     checkLogin();
   }, []);
 
+  const loginWithGoogle = async () => {
+    const resGoogle = new GoogleAuthProvider();
+    const response = await signInWithPopup(auth, resGoogle);
+    console.log(response);
+  }
+
   return (
     <AuthContext.Provider
       value={{
         user,
-        register,
+        signup,
         login,
         logout,
         isAuthenticated,
         errors,
-        loading
+        loading,
+        loginWithGoogle
       }}
     >
       {children}

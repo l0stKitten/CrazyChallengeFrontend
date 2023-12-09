@@ -17,10 +17,15 @@ import { useForm} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import  schema  from '../js/registersYupSchema'
 
+import { useAuth } from "../context/authContext";
+import { useEffect } from "react";	
+import { useNavigate } from 'react-router-dom';
+
 const steps = ['Datos', 'Gustos', 'Perfil', 'Crea'];
 
 
 export default function UserRegisterPage() {
+    const { signup, errors: registerErrors, isAuthenticated } = useAuth();
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
     const [value, setGenderValue] = useState(null);
@@ -30,6 +35,7 @@ export default function UserRegisterPage() {
     const [uploadedImage, setUploadedImage] = useState(null);
     const [termsAcepted, setTermsAcepted] = useState(false);
     const [termsnotAcepted, setTermsNotAcepted] = useState(false);
+    const navigate = useNavigate();
 
     const {
 		register,
@@ -41,8 +47,12 @@ export default function UserRegisterPage() {
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
+
+    const formData = watch();
 	
-	const onSubmit = (data) => console.log(data)
+	const onSubmit = async (value) => {
+        await signup(value);
+    };
 
     const handleGenderChange = (event) => {
         setSelectedGender(event.target.value);
@@ -78,6 +88,26 @@ export default function UserRegisterPage() {
 
     const handleNext = async () => {
         try {
+            if (activeStep === steps.length - 1) {
+                formData['avatar'] = 'goku';
+                if (formData['gender'] == 'hombre'){
+                    formData['gender'] = 'male'
+                }
+                if (formData['gender'] == 'mujer'){
+                    formData['gender'] = 'female'
+                }
+                if (formData['gender'] == 'otro'){
+                    formData['gender'] = 'other'
+                }
+                let dataPreferences = preferences.map(preferencia => {
+                    return { category: preferencia };
+                });
+                formData['preferences'] = dataPreferences;
+                console.log(formData);
+                await onSubmit(formData);
+                return;
+            }
+
             if (!isValid) {
                 handleValidateForm()
                 return;
@@ -128,7 +158,12 @@ export default function UserRegisterPage() {
         newSkipped.add(activeStep);
         return newSkipped;
         });
+
     };
+
+    useEffect(() => {
+        if (isAuthenticated) navigate("/posts");
+      }, [isAuthenticated]);
 
     return (
         <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>

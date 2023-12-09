@@ -20,6 +20,8 @@ import Grid from '@mui/material/Grid';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useAuth } from "../context/authContext";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -104,6 +106,8 @@ const CustomAppBar = styled(AppBar, {
 
 export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
 
+    const {logout} = useAuth();
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -111,6 +115,10 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
     const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+    };
 
     const handleNavigate = () => {
 		navigate('/posts')
@@ -330,7 +338,10 @@ export default function PrimarySearchAppBar( {openVar, cannotOpen} ) {
                     <Typography variant="body2">Tina Turner</Typography>
                     <Typography variant="body2">Rango: Pro</Typography>
                     </Grid>
+                    
                 </Grid>
+
+                <Button onClick={handleLogout}><LogoutIcon color="disabled" /></Button>
                 
             </Stack>
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
