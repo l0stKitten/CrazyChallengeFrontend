@@ -21,6 +21,11 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { useAuth } from "../context/authContext";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -64,7 +69,7 @@ const PasswordInput = ({ label, value, onChange }) => {
 
 
 const EditProfile = () => {
-    const {user, getUserById} = useAuth();
+    const {user, getUserById, update} = useAuth();
     const [fullName, setFullName] = useState('');
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
@@ -75,6 +80,8 @@ const EditProfile = () => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [userGender, setUserGender] = useState('');
+    const [biography, setBiography] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -82,16 +89,13 @@ const EditProfile = () => {
                 const usuario = await getUserById(user.id);
 
                 const preferencias = usuario.user.preferences.map(item => item.category);
-
-                // Actualizar los estados después de obtener la información del usuario
                 setFullName(usuario.user.fullname);
                 setUserName(usuario.user.username);
                 setEmail(usuario.user.email);
                 setUserPreferences(preferencias);
+                setBiography(usuario.user.biography);
                 
-                // ...
             } catch (error) {
-                // Manejo de errores si es necesario
                 console.error('Error fetching user data:', error);
             }
         };
@@ -109,6 +113,21 @@ const EditProfile = () => {
 
     const handleSaveChanges = () => {
         // lógica para guardar los cambios ga
+        
+            try {
+
+                const data = {
+                    fullname: fullName,
+                    gender: userGender,
+                    biography: biography
+                };
+
+                update(user.id, data);
+
+                
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
     };
 
     const updatedData = {
@@ -189,10 +208,29 @@ const EditProfile = () => {
             </Box>
 
             <Divider mt={2} style={{ margin: '25px 0' }} />
+            
+            <Box>
+                <Grid item xs={12}>
+                    <TextField
+                        label="Biografía"
+                        fullWidth
+                        InputLabelProps={{
+                            style: { fontWeight: 'bold', marginBottom: '8px', position: 'absolute' },
+                            shrink: true,
+                        }}
+                        placeholder={"Tu biografía es: " + biography}
+                        value={biography}
+                        //sx={{ backgroundColor: 'white' }}
+                    onChange={(e) => setBiography(e.target.value)}
+                    />
+                </Grid>
+            </Box>
+
+            <Divider mt={2} style={{ margin: '25px 0' }} />
 
             <Box>
             <Grid container spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <TextField
                             label="Full Name"
                             fullWidth
@@ -202,36 +240,27 @@ const EditProfile = () => {
                             }}
                             placeholder={"Tu nombre es: " + fullName}
                             sx={{ backgroundColor: 'white' }} // Agrega fondo blanco al TextField
-                        //onChange={(e) => setFullName(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <TextField
-                            label="User Name"
-                            fullWidth
-                            InputLabelProps={{
-                                style: { fontWeight: 'bold', marginBottom: '8px', position: 'absolute' },
-                                shrink: true,
-                            }}
-                            placeholder={"Tu nombre de usuario es: " + userName }
-                            sx={{ backgroundColor: 'white' }} // Agrega fondo blanco al TextField
-                        //onChange={(e) => setUserName(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Email Address"
-                            fullWidth
-                            InputLabelProps={{
-                                style: { fontWeight: 'bold', marginBottom: '8px', position: 'absolute' },
-                                shrink: true,
-                            }}
-                            placeholder={"Tu correo es: " + email}
-                            sx={{ backgroundColor: 'white' }} // Agrega fondo blanco al TextField
-                        //onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => setFullName(e.target.value)}
                         />
                     </Grid>
                 </Grid>
+                <Grid item xs={12}>
+						<Box sx={{mt:2, mb:1,}}>
+							<FormControl>
+								<FormLabel id="demo-controlled-radio-buttons-group">Género</FormLabel>
+								<RadioGroup
+									aria-labelledby="demo-controlled-radio-buttons-group"
+									name="gender"
+									row 
+                                    onChange={(e) => setUserGender(e.target.value)} 
+								>
+									<FormControlLabel value="female" control={<Radio />} label="Mujer"/>
+									<FormControlLabel value="male" control={<Radio />} label="Hombre"/>
+									<FormControlLabel value="other" control={<Radio />} label="Otros" />
+								</RadioGroup>
+							</FormControl>
+						</Box>
+					</Grid>
             </Box>
 
             <Divider mt={2} style={{ margin: '25px 0' }} />

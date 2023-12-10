@@ -45,12 +45,12 @@ const RegisterForm = ({register, errors, control, value, setValue, selectedGende
 		password: ''
 	  };
 
-
-	  if (sharedVariable != '') {
+	if (sharedVariable != '') {
 		defaultValues.fullname = sharedVariable.user.displayName;
 		defaultValues.email = sharedVariable.user.email;
 		defaultValues.password = '123456';
-	  }
+	}
+	
 
 	return (
 		<Grid container spacing={2} >

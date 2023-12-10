@@ -265,7 +265,7 @@ import { set } from 'react-hook-form';
             sx: {
                 bgcolor: stringToColor(name),
             },
-            children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+            children: `${name.split(' ')[0][0]}`,
             };
         }
 
@@ -355,7 +355,8 @@ import { set } from 'react-hook-form';
     
                     <Grid container wrap="nowrap" alignItems="center">
                         <Grid item>
-                        <Avatar sx={{ width: 10, height: 10 }} {...stringAvatar('Tina Turner')} />
+                            
+                        <Avatar sx={{ width: 10, height: 10 }} {...stringAvatar(username)} />
                         </Grid>
                         <Grid item sx={{ml:2}}>
                         <Typography variant="body2">{username}</Typography>
