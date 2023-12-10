@@ -11,14 +11,20 @@ import IconButton from '@mui/material/IconButton';
 import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
 import { Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemText } from '@mui/material';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-
+import {createChatRequest} from '../api/chat'
 import { createTheme} from '@mui/material/styles';
 import { ThemeProvider } from '@emotion/react';
 
-const ChatList = ({ title, chatlist, mtbool, handleChatOpen, seguidores, setChats}) => {
-    const [showAll, setShowAll] = useState(false);
+import imgTest from '../img/puppycat.png'
 
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:3000");
+
+const ChatList = ({ title, chatlist, mtbool, handleChatOpen, seguidores, setChats, setOpenChatID}) => {
+    const [showAll, setShowAll] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+
     const handleOpenModal = () => {
         setModalOpen(true);
       };
@@ -27,21 +33,27 @@ const ChatList = ({ title, chatlist, mtbool, handleChatOpen, seguidores, setChat
         setModalOpen(false);
       };
 
-    const visibleContacts = showAll ? chatlist : chatlist.slice(0, 5);
 
     const openChat = (contact) => {
-        // Check if the selected chat is already in the chats array
         const isChatInList = chatlist.some((existingChat) => existingChat.id === contact.id);
 
-        // If the chat is not in the list, add it to the chats array
         if (!isChatInList) {
-            const updatedChats = [...chatlist, contact];
-            // Update the state with the new chat list
-            setChats(updatedChats);
-        }
 
-        handleCloseModal()
-        handleChatOpen(contact)
+            //const chat = createChatRequest(imgTest, contact.username, contact.id);
+
+            //const updatedChats = [...chatlist, chat];
+            //setChats(updatedChats);
+            //crear Chat con
+            
+            handleCloseModal()
+            handleChatOpen(contact)
+            setOpenChatID(contact.id)
+        } else {
+            handleCloseModal()
+            handleChatOpen(contact)
+            setOpenChatID(contact.id)
+        }
+      
     };
 
     const toggleShowAll = () => {
@@ -106,24 +118,20 @@ const ChatList = ({ title, chatlist, mtbool, handleChatOpen, seguidores, setChat
                     alignItems="flex-start"
                     spacing={2}
                 >
-                    {visibleContacts.map((contact, index) => (
-                        <Grid item xs={12} key={contact.id} >
+                    {/* {chatlist.map((contact, index) => (
+                        <Grid item xs={12} key={contact} >
                         <Grid container wrap="nowrap" alignItems="center" onClick={() => handleChatOpen(contact)}>
                             <Grid item >
-                                <Avatar alt={contact.name} src="/path-to-avatar-image.jpg" />
+                                <Avatar alt={contact} src="/path-to-avatar-image.jpg" />
                             </Grid>
                             <Grid item marginLeft={2}>
-                                <Typography variant="body2">{contact.name}</Typography>
+                                <Typography variant="body2">{contact}</Typography>
                             </Grid>
                         </Grid>
                         </Grid>
-                    ))}
+                    ))} */}
                 </Grid>
-                {chatlist.length > 5 && (
-                    <Button onClick={toggleShowAll}>
-                    {showAll ? 'Show Less' : 'View All'}
-                    </Button>
-                )}
+                
             </CardContent>
         
         </Card>

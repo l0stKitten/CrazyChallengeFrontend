@@ -12,6 +12,8 @@ import meemociona from "../jsonlottie/me emociona.json";
 import meencorazona from "../jsonlottie/me encorazona.json";
 import memata from "../jsonlottie/me mata.json";
 
+import { addReactionRequest} from '../api/post'
+
 
 export default function ReactionPost(props) {
     const { handleReaction } = props;
@@ -162,37 +164,115 @@ export default function ReactionPost(props) {
         </SvgIcon>
 
 
-    const handleReactionfunctionME = () => {
-        handleReaction(inlove)
+    const handleReactionfunctionME = async() => {
+
+        try{
+            const data = {
+                reaction: "me encanta"
+            };
+            const com = await addReactionRequest(props.post_id, data)
+
+            console.log(com.data)
+        } catch (error){
+            console.log(error)
+        }
+        
+        handleReaction(inlove, "me encanta")
         handleClose()
     };
 
-    const handleReactionfunctionMD = () => {
-        handleReaction(funny)
+    const handleReactionfunctionMD = async () => {
+        try{
+            const data = {
+                reaction: "me divierte"
+            };
+            const com = await addReactionRequest(props.post_id, data)
+
+            console.log(com.data)
+        } catch (error){
+            console.log(error)
+        }
+
+        handleReaction(funny, "me divierte")
         handleClose()
     };
 
-    const handleReactionfunctionMS = () => {
-        handleReaction(surprise)
+    const handleReactionfunctionMS = async () => {
+        try{
+            const data = {
+                reaction: "me sorprende"
+            };
+            const com = await addReactionRequest(props.post_id, data)
+
+            console.log(com.data)
+        } catch (error){
+            console.log(error)
+        }
+
+        handleReaction(surprise, )
         handleClose()
     };
 
-    const handleReactionfunctionP = () => {
+    const handleReactionfunctionP = async () => {
+        try{
+            const data = {
+                reaction: "cool"
+            };
+            const com = await addReactionRequest(props.post_id, data)
+
+            console.log(com.data)
+        } catch (error){
+            console.log(error)
+        }
+
         handleReaction(cool)
         handleClose()
     };
 
-    const handleReactionfunctionMEM = () => {
-        handleReaction(happy)
+    const handleReactionfunctionMEM = async () => {
+        try{
+            const data = {
+                reaction: "me emociona"
+            };
+            const com = await addReactionRequest(props.post_id, data)
+
+            console.log(com.data)
+        } catch (error){
+            console.log(error)
+        }
+
+        handleReaction(happy )
         handleClose()
     };
 
-    const handleReactionfunctionMC = () => {
+    const handleReactionfunctionMC = async () => {
+        try{
+            const data = {
+                reaction: "me encorazona"
+            };
+            const com = await addReactionRequest(props.post_id, data)
+
+            console.log(com.data)
+        } catch (error){
+            console.log(error)
+        }
+
         handleReaction(love)
         handleClose()
     };
 
-    const handleReactionfunctionMM = () => {
+    const handleReactionfunctionMM = async () => {
+        try{
+            const data = {
+                reaction: "me mata"
+            };
+            const com = await addReactionRequest(props.post_id, data)
+
+            console.log(com.data)
+        } catch (error){
+            console.log(error)
+        }
+
         handleReaction(dead)
         handleClose()
     };

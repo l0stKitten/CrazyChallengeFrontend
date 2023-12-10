@@ -20,10 +20,13 @@ import Popover from '@mui/material/Popover';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import {PORTBACKEND} from '../config'
+
+import moment from "moment";
 
 import SendIcon from '@mui/icons-material/Send';
 import ReactionPost from './Reaction'
-
+import {getPostByIdRequest, addCommentRequest} from '../api/post'
 import img from '../img/puppycat.png'
 
 const ExpandMore = styled((props) => {
@@ -37,53 +40,61 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export default function Post() {
+export default function Post({user_id, post_id, createdat, description, videopath}) {
+    moment.locale('en');
     const [expanded, setExpanded] = React.useState(false);
-    const [comments, setComments] = useState([{
-        "id": 1,
-        "author": "jiafe",
-        "content": "so funny",
-    },
-    {
-        "id": 2,
-        "author": "meife",
-        "content": "so funny",
-    }])
+
     const [reaction, setReaction] = React.useState(<FavoriteBorderOutlinedIcon />);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
-    const [comment, setComment] = useState('');
+    const [commentText, setComment] = useState('');
+
+    const [allComments, setAllComments] = useState([]);
+	
+	useEffect(() => {
+		const getComments = async () => {
+			try { 
+				const response = await getPostByIdRequest(post_id)
+	
+				console.log(response.data.comments);
+				setAllComments(response.data.comments);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+	
+		getComments();
+	}, []);
+
 
     const handleCommentChange = (event) => {
         setComment(event.target.value);
     };
 
-    const handleSubmit = () => {
-        if (comment.trim() !== '') {
-        onCommentSubmit(comment);
-        setComment('');
+    const handleSubmit = async () => {
+        if (commentText.trim() !== '') {
+            try{
+                
+                const data = {
+                    comment: commentText
+                };
+                const com = await addCommentRequest(post_id, data)
+
+                console.log(com.data)
+
+                setAllComments((prevList) => {
+                    return [...prevList, com.data];
+                });
+                setComment('');
+            } catch (error){
+                console.log(error)
+            }
         }
     };
 
-    const onCommentSubmit = (commentText) => {
-        // Create a new comment object with the comment text and other relevant data
-         
-        setComments((prevComments) => {
-            return [...prevComments, {
-                id: 3,
-                content: commentText,
-                author: 'User1', // Replace with the actual author's information
-            }];
-        });
-        // Add the new comment to your list of comments (e.g., an array)
-        // You may want to use state management tools like useState or Redux for this
-      
-        // Update the UI to display the new comment
-        // You may need to update your component's state to reflect the new comment
-    };
+    const handleReaction = async (icon) => {
 
-    const handleReaction = (icon) => {
         setReaction(icon);
     };
 
@@ -104,7 +115,7 @@ export default function Post() {
     const id = open ? 'simple-popover' : undefined;
 
     return (
-        <Card sx={{ maxWidth: 680, boxShadow:0, borderRadius: 3}}>
+        <Card sx={{ maxWidth: 680, minWidth: 680, boxShadow:0, borderRadius: 3}}>
         <CardHeader
             avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -116,21 +127,19 @@ export default function Post() {
                 <MoreVertIcon />
             </IconButton>
             }
-            title="Shrimp and Chorizo Paella"
-            subheader="September 14, 2016"
+            title={user_id}
+            subheader={moment(createdat).format('d MMMM YYYY, hh:mm')}
         />
         <CardContent>
             <Typography variant="body2" color="text.secondary">
-            This impressive paella is a perfect party dish and a fun meal to cook
-            together with your guests. Add 1 cup of frozen peas along with the mussels,
-            if you like.
+                {description}
             </Typography>
         </CardContent>
         <CardMedia
             component="img"
             height="610"
-            image={img}
-            alt="Puppycat Pick up my groceries peasant"
+            image={PORTBACKEND + videopath}
+            alt={PORTBACKEND + videopath}
         />
         <CardActions disableSpacing >
             <ButtonGroup variant="text" color="error" aria-label="text button group" >
@@ -156,7 +165,7 @@ export default function Post() {
                     }}
                 >
                     <Paper > {/* Adjust alpha value here */}
-                        <ReactionPost handleReaction={handleReaction} handleClose={handleClose}/>
+                        <ReactionPost handleReaction={handleReaction} post_id={post_id} handleClose={handleClose}/>
                     </Paper>
                 </Popover>
                 <Button color='info' startIcon={<ModeCommentOutlinedIcon />} onClick={handleExpandClick}>Comentar</Button>
@@ -186,7 +195,7 @@ export default function Post() {
                                     <TextField
                                         fullWidth
                                         label="Write a comment"
-                                        value={comment}
+                                        value={commentText}
                                         onChange={handleCommentChange}
                                         multiline
                                     />
@@ -214,15 +223,15 @@ export default function Post() {
 
                 {/*other comments */}
                 <Grid container spacing={2}>
-                    {comments.map((comment) => (
-                        <Grid item xs={12} key={comment.id} >
+                    {allComments.map((comment) => (
+                        <Grid item xs={12} key={comment._id} >
                         <Grid container wrap="nowrap" alignItems="center">
                             <Grid item>
-                            <Avatar alt={comment.author} />
+                            <Avatar alt={comment.user._id} />
                             </Grid>
                             <Grid item sx={{ml:2}}>
-                            <Typography variant="body2">{comment.author}</Typography>
-                            <Typography variant="body2">{comment.content}</Typography>
+                            <Typography variant="body2">{comment.user._id}</Typography>
+                            <Typography variant="body2">{comment.text}</Typography>
                             </Grid>
                         </Grid>
                         </Grid>

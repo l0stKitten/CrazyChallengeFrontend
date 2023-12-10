@@ -1,8 +1,11 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 
+import {getMessagesRequest} from '../api/chat'
 import ContactList from './CardSM'
 import ChatList from './ChatList'
 import ChatPopup from './ChatPopup'
+
+import {useAuth} from '../context/authContext'
 
 const contacts = [
 {"id":1,"name":"Grange Slight"},
@@ -40,6 +43,28 @@ const initialChatsArray = [
 
 export default function ChatsandContact() {
     const [chats, setChats] = React.useState([...initialChatsArray]);
+    const { user, getUserById} = useAuth();
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const usuario = await getUserById(user.id);
+    //             console.log(usuario.user.groupChats);
+    //             setChats(usuario.user.groupChats)
+
+    //         } catch (error) {
+    //             setChats(["prueba"])
+    //             console.error('Error fetching user data:', error);
+    //         }
+    //     };
+    //     //
+    //     fetchData()
+    //     console.log(user)
+    // }, [])
+
+    const [openChatID, setOpenChatID] = React.useState(0)
+    const [messages, setMessages] = useState([]);
+
 	const [openChat, setOpenChat] = React.useState(false);
     const [selectedChat, setSelectedChat] = React.useState(null);
     const [minimizedChats, setMinimizedChats] = React.useState([]);
@@ -48,9 +73,25 @@ export default function ChatsandContact() {
         setMinimizedChats([...minimizedChats, chatData]);
     };
 
+    const getMessagesChat = async (contact) => {
+        const response = await getMessagesRequest(contact)
+
+            if (response.data.chat.length == 0){
+                setMessages([])
+            } else {
+                setMessages(response.data.chat)
+            }
+    }
+
     const handleChatOpen = (contact) => {
-        setSelectedChat(contact);
-        setOpenChat(true);
+        try { 
+            getMessagesChat(contact)
+
+            setSelectedChat(contact);
+            setOpenChat(true);
+        } catch (error) {
+            console.error(error);
+        }
     };
     
     const handleChatClose = () => {
@@ -60,13 +101,16 @@ export default function ChatsandContact() {
 
 	return (
         <Fragment>
-            <ChatList title={"Chats"} handleChatOpen={handleChatOpen} chatlist={chats} setChats={setChats} seguidores={contacts} mtbool={false}></ChatList>
+            <ChatList title={"Chats"} handleChatOpen={handleChatOpen} chatlist={chats} setChats={setChats} seguidores={contacts} mtbool={false} setOpenChatID={setOpenChatID}></ChatList>
             <ContactList title={"Seguidores"} contacts={contacts} mtbool={true}></ContactList>
             <ChatPopup
                 open={openChat}
                 onClose={handleChatClose}
                 chatData={selectedChat}
                 onMinimize={handleMinimizeChat}
+                openChatID={openChatID}
+                messages={messages}
+                setMessages={setMessages}
             />
         </Fragment>
 		

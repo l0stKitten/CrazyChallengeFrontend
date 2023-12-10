@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Post from './Post'
 import ChatsandContact from './ChatsandContact';
@@ -10,8 +10,7 @@ import { useMediaQuery } from '@mui/material';
 
 import { createTheme, styled, useTheme } from '@mui/material/styles';
 
-import { PORTBACKEND } from '../config.js';
-import axios from 'axios';
+import {getAllPostsRequest} from '../api/post'
 import { useNavigate } from 'react-router-dom';
 
 const DrawerFooter = styled('div')(({ theme }) => ({
@@ -34,17 +33,24 @@ export default function PostsList() {
 	const isXs = useMediaQuery('(max-width:996px)'); // Adjust the width to match your "xs" breakpoint
 	const navigate = useNavigate();
 
-	useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await axios.get(PORTBACKEND + '/api/user/verify');
-            } catch (err) {
-                navigate('/');
-            }
-        };
+	const [postsListData, setPostList] = useState([]);
+	
 
-        fetchData();
-    }, [navigate]);
+	useEffect(() => {
+		const getPosts = async () => {
+			try { 
+				const response = await getAllPostsRequest()
+	
+				console.log(response.data);
+				setPostList(response.data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+	
+		getPosts();
+	}, []);
+
 
 	return (
 		<Grid container spacing={2} marginRight={2}>
@@ -54,9 +60,9 @@ export default function PostsList() {
 				alignItems="center"
 				gap={4}
 			>
-				<CreatePost></CreatePost>
-				{Array.from(Array(6)).map((_, index) => (
-					<Post key={index}>xs=8</Post>
+				<CreatePost setPostList={setPostList}></CreatePost>
+				{postsListData.length > 0 && postsListData.sort((a, b) => new Date(b.createdat) - new Date(a.createdat)).map((post) => (
+					<Post key={post._id} post_id={post._id} user_id={post.user} createdat={post.createdAt} description={post.description} videopath={post.mediapath} ></Post>
 				))}
 			</Grid>
 			{isXs ? null : <Grid item xs={2} container

@@ -14,11 +14,38 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import { Tooltip } from '@mui/material';
 import { red } from '@mui/material/colors';
+import {createPostRequest} from '../api/post'
 
-const CreatePost = ({ onPost }) => {
+const CreatePost = ({ onPost, setPostList}) => {
     const [postContent, setPostContent] = useState('');
     const [uploadedImage, setUploadedImage] = useState(null);
     const fileInputRef = useRef(null);
+
+    const handleCreatePost = async (e) => {
+        e.preventDefault();
+    
+        try {
+            console.log('Content:', postContent);
+            console.log('media:', uploadedImage.name);
+
+            const formData = new FormData();
+            formData.append('media', uploadedImage);
+            formData.append('description', postContent);
+    
+            // Proceed with handleCreatePost using the data returned from handleCreateImage
+            const response = await createPostRequest(formData)
+    
+            console.log(response.data);
+    
+            setPostList((prevList) => {
+                return [...prevList, response.data];
+            });
+    
+            handleCancelClick(); // Call handleCancelClick after the axios request succeeds
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleButtonClick = () => {
         // Trigger the click event of the file input
@@ -27,7 +54,7 @@ const CreatePost = ({ onPost }) => {
 
     const handleCancelClick = () => {
         setPostContent('')
-        setUploadedImage(null)
+        setUploadedImage()
     };
 
     const handlePostContentChange = (event) => {
@@ -112,6 +139,7 @@ const CreatePost = ({ onPost }) => {
                 <Tooltip title={"Postear"} placement="top" >
                     <IconButton aria-label="post"
                         color="primary"
+                        onClick={handleCreatePost}
                     >
                         <SendOutlinedIcon />
                     </IconButton>

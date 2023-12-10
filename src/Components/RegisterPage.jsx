@@ -46,7 +46,7 @@ const RegisterForm = ({register, errors, control, value, setValue, selectedGende
 	  };
 
 
-	  if (sharedVariable != null || sharedVariable != undefined) {
+	  if (sharedVariable != '') {
 		defaultValues.fullname = sharedVariable.user.displayName;
 		defaultValues.email = sharedVariable.user.email;
 		defaultValues.password = '123456';
