@@ -37,7 +37,7 @@
 		const [error, setError] = useState(['']);
 		const isXs = useMediaQuery('(max-width:912px)')	
 		const navigate = useNavigate();
-		const {login2, login, errors: loginErrors, isAuthenticated, loginWithGoogle } = useAuth();
+		const { login, errors: loginErrors, isAuthenticated, loginWithGoogle } = useAuth();
 		const { setSharedVariable } = useUserContext();
 
 		useEffect(() => {

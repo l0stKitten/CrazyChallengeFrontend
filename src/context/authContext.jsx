@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
-import { loginRequest, registerRequest, verifyTokenRequest, getUserByIdRequest } from "../api/auth";
+import { loginRequest, registerRequest, verifyTokenRequest, getUserByIdRequest, updateRequest } from "../api/auth";
 import { auth } from "../firebase/firebase.config";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Cookies from "js-cookie";
@@ -60,6 +60,15 @@ export const AuthProvider = ({ children }) => {
       setErrors(error.response.data.message);
     }
   };
+
+  const update = async (id, user) => {
+    try {
+      const res = await updateRequest(id, user);
+      console.log(res);
+    }catch (error) {
+      console.log(error.response.data.message);
+    }
+  }
 
   const logout = () => {
     Cookies.remove("token");
@@ -121,7 +130,8 @@ export const AuthProvider = ({ children }) => {
         errors,
         loading,
         loginWithGoogle,
-        getUserById
+        getUserById,
+        update
       }}
     >
       {children}
