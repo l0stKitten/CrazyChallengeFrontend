@@ -35,13 +35,16 @@ export const AuthProvider = ({ children }) => {
       const res = await loginRequest(user);
       setUser(res.data);
       setIsAuthenticated(true);
+      return(res.status)
     } catch (error) {
+      
       setErrors(error.response.data.message);
       const timer = setTimeout(() => {
         setErrors([]);
       }, 5000);
 
       clearTimeout(timer);
+      return(error.response.status);
     }
   };
 

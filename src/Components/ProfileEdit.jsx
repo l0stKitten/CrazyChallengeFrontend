@@ -83,15 +83,12 @@ const EditProfile = () => {
 
                 const preferencias = usuario.user.preferences.map(item => item.category);
 
-                // Actualizar los estados después de obtener la información del usuario
                 setFullName(usuario.user.fullname);
                 setUserName(usuario.user.username);
                 setEmail(usuario.user.email);
                 setUserPreferences(preferencias);
                 
-                // ...
             } catch (error) {
-                // Manejo de errores si es necesario
                 console.error('Error fetching user data:', error);
             }
         };

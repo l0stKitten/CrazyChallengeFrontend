@@ -37,7 +37,7 @@
 		const [error, setError] = useState(['']);
 		const isXs = useMediaQuery('(max-width:912px)')	
 		const navigate = useNavigate();
-		const {login, errors: loginErrors, isAuthenticated, loginWithGoogle } = useAuth();
+		const {login2, login, errors: loginErrors, isAuthenticated, loginWithGoogle } = useAuth();
 		const { setSharedVariable } = useUserContext();
 
 		useEffect(() => {
@@ -68,10 +68,14 @@
 					email: resGoogle.user.email,
 					password: '123456'
 				};
-				login(data);
+				const a = await login(data);
+				if (a == 400){
+					setSharedVariable(resGoogle);
+					navigate("/register");
+				}
 			}catch (error) {
-				setSharedVariable(resGoogle);
-				navigate("/register");
+				console.log(error);
+				
 			}
 		}
 
